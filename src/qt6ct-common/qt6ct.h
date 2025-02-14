@@ -65,6 +65,7 @@ public:
     static QString userStyleSheetPath();
     static QStringList sharedStyleSheetPaths();
     static QString userColorSchemePath();
+    static QString styleColorSchemeFile();
     static QStringList sharedColorSchemePaths();
     static QString resolvePath(const QString &path);
     static QPalette loadColorScheme(const QString &filePath, const QPalette &fallback);

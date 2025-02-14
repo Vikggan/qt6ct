@@ -62,6 +62,7 @@ private slots:
     void updateActions();
 
 private:
+    void changeEvent(QEvent *event) override;
     void readSettings();
     void setStyle(QWidget *w, QStyle *s);
     void setPalette(QWidget *w, QPalette p);

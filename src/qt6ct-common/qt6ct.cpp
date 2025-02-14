@@ -110,6 +110,11 @@ QString Qt6CT::userColorSchemePath()
     return configPath() + QLatin1String("/colors");
 }
 
+QString Qt6CT::styleColorSchemeFile()
+{
+    return configPath() + QLatin1String("/style-colors.conf");
+}
+
 QStringList Qt6CT::sharedColorSchemePaths()
 {
     QStringList paths;
