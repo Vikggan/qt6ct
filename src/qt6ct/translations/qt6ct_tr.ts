@@ -4,148 +4,138 @@
 <context>
     <name>AppearancePage</name>
     <message>
-        <location filename="../appearancepage.ui" line="20"/>
+        <location filename="../appearancepage.ui" line="22"/>
         <source>Style:</source>
         <translation>Tarz:</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="59"/>
+        <location filename="../appearancepage.ui" line="107"/>
         <source>Preview</source>
         <translation>Önizleme</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="69"/>
+        <location filename="../appearancepage.ui" line="117"/>
         <source>Active palette</source>
         <translation>Etkin palet</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="74"/>
+        <location filename="../appearancepage.ui" line="122"/>
         <source>Inactive palette</source>
         <translation>Etkin olmayan palet</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="79"/>
+        <location filename="../appearancepage.ui" line="127"/>
         <source>Disabled palette</source>
         <translation>Devre dışı olan palet</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="113"/>
-        <source>Palette</source>
-        <translation>Palet</translation>
-    </message>
-    <message>
-        <location filename="../appearancepage.ui" line="124"/>
-        <location filename="../appearancepage.cpp" line="85"/>
+        <location filename="../appearancepage.cpp" line="84"/>
+        <location filename="../appearancepage.cpp" line="370"/>
         <source>Default</source>
         <translation>Varsayılan</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="134"/>
-        <source>Custom</source>
-        <translation>Özel</translation>
-    </message>
-    <message>
-        <location filename="../appearancepage.ui" line="161"/>
+        <location filename="../appearancepage.ui" line="42"/>
         <source>Color scheme:</source>
         <translation>Renk şeması:</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="187"/>
-        <source>...</source>
-        <translation>...</translation>
-    </message>
-    <message>
-        <location filename="../appearancepage.ui" line="218"/>
+        <location filename="../appearancepage.ui" line="82"/>
         <source>Standard dialogs:</source>
         <translation>Standart iletişim kutuları:</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="72"/>
+        <location filename="../appearancepage.cpp" line="71"/>
         <source>Create</source>
         <translation>Oluştur</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="73"/>
+        <location filename="../appearancepage.cpp" line="72"/>
         <source>Edit</source>
         <translation>Düzenle</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="74"/>
+        <location filename="../appearancepage.cpp" line="73"/>
         <source>Create a Copy</source>
         <translation>Bir Kopya oluştur</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="75"/>
+        <location filename="../appearancepage.cpp" line="74"/>
         <source>Rename</source>
         <translation>Yeniden adlandır</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="77"/>
+        <location filename="../appearancepage.cpp" line="76"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="136"/>
-        <location filename="../appearancepage.cpp" line="210"/>
-        <location filename="../appearancepage.cpp" line="249"/>
+        <location filename="../appearancepage.cpp" line="167"/>
+        <location filename="../appearancepage.cpp" line="241"/>
+        <location filename="../appearancepage.cpp" line="280"/>
         <source>Enter Color Scheme Name</source>
         <translation>Renk Şeması Adını Girin</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="136"/>
-        <location filename="../appearancepage.cpp" line="210"/>
-        <location filename="../appearancepage.cpp" line="249"/>
+        <location filename="../appearancepage.cpp" line="167"/>
+        <location filename="../appearancepage.cpp" line="241"/>
+        <location filename="../appearancepage.cpp" line="280"/>
         <source>File name:</source>
         <translation>Dosya adı:</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="145"/>
-        <location filename="../appearancepage.cpp" line="221"/>
-        <location filename="../appearancepage.cpp" line="229"/>
-        <location filename="../appearancepage.cpp" line="259"/>
+        <location filename="../appearancepage.cpp" line="176"/>
+        <location filename="../appearancepage.cpp" line="252"/>
+        <location filename="../appearancepage.cpp" line="260"/>
+        <location filename="../appearancepage.cpp" line="290"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="145"/>
-        <location filename="../appearancepage.cpp" line="221"/>
-        <location filename="../appearancepage.cpp" line="259"/>
+        <location filename="../appearancepage.cpp" line="176"/>
+        <location filename="../appearancepage.cpp" line="252"/>
+        <location filename="../appearancepage.cpp" line="290"/>
         <source>The color scheme &quot;%1&quot; already exists</source>
         <translation>&quot;%1&quot; renk şeması zaten var</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="163"/>
-        <location filename="../appearancepage.cpp" line="186"/>
-        <location filename="../appearancepage.cpp" line="244"/>
+        <location filename="../appearancepage.cpp" line="194"/>
+        <location filename="../appearancepage.cpp" line="217"/>
+        <location filename="../appearancepage.cpp" line="275"/>
         <source>Warning</source>
         <translation>Uyarı</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="163"/>
-        <location filename="../appearancepage.cpp" line="186"/>
-        <location filename="../appearancepage.cpp" line="244"/>
+        <location filename="../appearancepage.cpp" line="194"/>
+        <location filename="../appearancepage.cpp" line="217"/>
+        <location filename="../appearancepage.cpp" line="275"/>
         <source>The color scheme &quot;%1&quot; is read only</source>
         <translation>&quot;%1&quot; renk şeması salt okunur</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="191"/>
+        <location filename="../appearancepage.cpp" line="222"/>
         <source>Confirm Remove</source>
         <translation>Kaldırmayı Onayla</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="192"/>
+        <location filename="../appearancepage.cpp" line="223"/>
         <source>Are you sure you want to remove color scheme &quot;%1&quot;?</source>
         <translation>&quot;%1&quot; renk şemasını kaldırmak istediğinizden emin misiniz?</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="212"/>
+        <location filename="../appearancepage.cpp" line="243"/>
         <source>%1 (copy)</source>
         <translation>%1 (kopya)</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="229"/>
+        <location filename="../appearancepage.cpp" line="260"/>
         <source>Unable to copy file</source>
         <translation>Dosya kopyalanamıyor</translation>
+    </message>
+    <message>
+        <location filename="../appearancepage.cpp" line="371"/>
+        <source>Style&apos;s colors</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
