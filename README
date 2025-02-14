@@ -8,9 +8,9 @@ Official home page: https://www.opencode.net/trialuser/qt6ct
 Requirements:
 
 - GNU Linux or FreeBSD
-- qtbase >= 6.0.0
-- qtsvg >= 6.0.0 (Runtime dependency for the SVG icon support)
-- qttools >= 6.0.0 (For build only)
+- qtbase >= 6.2.0
+- qtsvg >= 6.2.0 (Runtime dependency for the SVG icon support)
+- qttools >= 6.2.0 (For build only)
 
 
 Installation:

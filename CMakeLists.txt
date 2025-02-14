@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16.0)
+cmake_minimum_required(VERSION 3.18.0)
 
 project(qt6ct LANGUAGES CXX)
 
@@ -20,11 +20,14 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
 
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000 -DUSE_WIDGETS)
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060200 -DUSE_WIDGETS -DQT_DEPRECATED_WARNINGS -DQT_MESSAGELOGCONTEXT)
+add_compile_options(-Wall -Wextra)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-find_package(Qt6 REQUIRED COMPONENTS BuildInternals Core Widgets OPTIONAL_COMPONENTS LinguistTools)
+find_package(Qt6 6.2 CONFIG REQUIRED COMPONENTS BuildInternals Core Widgets OPTIONAL_COMPONENTS LinguistTools)
 
 get_target_property(QT_QTPATHS_EXECUTABLE Qt6::qtpaths IMPORTED_LOCATION)
 
