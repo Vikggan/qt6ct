@@ -221,8 +221,8 @@ void Qt6CTPlatformTheme::createFSWatcher()
     QTimer *timer = new QTimer(this);
     timer->setSingleShot(true);
     timer->setInterval(3000);
-    connect(watcher, SIGNAL(directoryChanged(QString)), timer, SLOT(start()));
-    connect(timer, SIGNAL(timeout()), SLOT(updateSettings()));
+    connect(watcher, &QFileSystemWatcher::directoryChanged, timer, qOverload<>(&QTimer::start));
+    connect(timer, &QTimer::timeout, this, &Qt6CTPlatformTheme::updateSettings);
 }
 
 void Qt6CTPlatformTheme::updateSettings()

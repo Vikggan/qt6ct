@@ -49,7 +49,7 @@ IconThemePage::IconThemePage(QWidget *parent) :
 
     m_thread = QThread::create(&IconThemePage::loadThemes, this);
     m_thread->setParent(this);
-    connect(m_thread, SIGNAL(finished()), SLOT(onFinished()));
+    connect(m_thread, &QThread::finished, this, &IconThemePage::onFinished);
     m_thread->start();
 }
 

@@ -55,7 +55,7 @@ AppearancePage::AppearancePage(QWidget *parent) :
     keys.removeAll("gtk2"); //hide gtk2 alias
     m_ui->styleComboBox->addItems(keys);
 
-    connect(m_ui->paletteComboBox, SIGNAL(activated(int)), SLOT(updatePalette()));
+    connect(m_ui->paletteComboBox, &QComboBox::activated, this, &AppearancePage::updatePalette);
 
     m_previewWidget = new QWidget(this);
     m_previewUi = new Ui::PreviewForm();
@@ -68,17 +68,17 @@ AppearancePage::AppearancePage(QWidget *parent) :
     w->move(10, 10);
 
     QMenu *menu = new QMenu(this);
-    menu->addAction(QIcon::fromTheme("document-new"), tr("Create"), this, SLOT(createColorScheme()));
-    m_changeColorSchemeAction = menu->addAction(QIcon::fromTheme("accessories-text-editor"), tr("Edit"), this, SLOT(changeColorScheme()));
-    menu->addAction(QIcon::fromTheme("edit-copy"), tr("Create a Copy"), this, SLOT(copyColorScheme()));
-    m_renameColorSchemeAction = menu->addAction(tr("Rename"), this, SLOT(renameColorScheme()));
+    menu->addAction(QIcon::fromTheme("document-new"), tr("Create"), this, qOverload<>(&AppearancePage::createColorScheme));
+    m_changeColorSchemeAction = menu->addAction(QIcon::fromTheme("accessories-text-editor"), tr("Edit"), this, &AppearancePage::changeColorScheme);
+    menu->addAction(QIcon::fromTheme("edit-copy"), tr("Create a Copy"), this, &AppearancePage::copyColorScheme);
+    m_renameColorSchemeAction = menu->addAction(tr("Rename"), this, &AppearancePage::renameColorScheme);
     menu->addSeparator();
-    m_removeColorSchemeAction = menu->addAction(QIcon::fromTheme("edit-delete"), tr("Remove"), this, SLOT(removeColorScheme()));
+    m_removeColorSchemeAction = menu->addAction(QIcon::fromTheme("edit-delete"), tr("Remove"), this, &AppearancePage::removeColorScheme);
     m_ui->colorSchemeButton->setMenu(menu);
 
     m_changeColorSchemeAction->setIcon(QIcon::fromTheme("accessories-text-editor"));
     m_removeColorSchemeAction->setIcon(QIcon::fromTheme("list-remove"));
-    connect(menu, SIGNAL(aboutToShow()), SLOT(updateActions()));
+    connect(menu, &QMenu::aboutToShow, this, &AppearancePage::updateActions);
 
     keys = QPlatformThemeFactory::keys();
     m_ui->dialogComboBox->addItem(tr("Default"), "default");
@@ -197,7 +197,7 @@ void AppearancePage::changeColorScheme()
     }
 
     PaletteEditDialog d(m_customPalette, m_selectedStyle, this);
-    connect(&d, SIGNAL(paletteChanged(QPalette)), SLOT(setPreviewPalette(QPalette)));
+    connect(&d, &PaletteEditDialog::paletteChanged, this, &AppearancePage::setPreviewPalette);
     if(d.exec() == QDialog::Accepted)
     {
         m_customPalette = d.selectedPalette();

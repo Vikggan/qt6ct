@@ -48,11 +48,11 @@ QSSPage::QSSPage(QWidget *parent) :
     QDir("/").mkpath(Qt6CT::userStyleSheetPath());
 
     m_menu = new QMenu(this);
-    m_menu->addAction(QIcon::fromTheme("accessories-text-editor"), tr("Edit"), this, SLOT(on_editButton_clicked()));
-    m_menu->addAction(QIcon::fromTheme("edit-copy"), tr("Create a Copy"), this, SLOT(copyStyleSheet()));
-    m_menu->addAction(tr("Rename"), this, SLOT(on_renameButton_clicked()));
+    m_menu->addAction(QIcon::fromTheme("accessories-text-editor"), tr("Edit"), this, &QSSPage::on_editButton_clicked);
+    m_menu->addAction(QIcon::fromTheme("edit-copy"), tr("Create a Copy"), this, &QSSPage::copyStyleSheet);
+    m_menu->addAction(tr("Rename"), this, &QSSPage::on_renameButton_clicked);
     m_menu->addSeparator();
-    m_menu->addAction(QIcon::fromTheme("edit-delete"), tr("Remove"), this, SLOT(on_removeButton_clicked()));
+    m_menu->addAction(QIcon::fromTheme("edit-delete"), tr("Remove"), this, &QSSPage::on_removeButton_clicked);
 
     readSettings();
 
