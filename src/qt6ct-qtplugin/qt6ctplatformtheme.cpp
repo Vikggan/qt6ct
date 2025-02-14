@@ -336,7 +336,7 @@ bool Qt6CTPlatformTheme::hasWidgets()
 QString Qt6CTPlatformTheme::loadStyleSheets(const QStringList &paths)
 {
     QString content;
-    for(const QString &path : qAsConst(paths))
+    for(const QString &path : std::as_const(paths))
     {
         if(!QFile::exists(path))
             continue;

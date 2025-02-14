@@ -201,6 +201,6 @@ void Qt6CT::unregisterStyleInstance(Qt6CT::StyleInstance *instance)
 
 void Qt6CT::reloadStyleInstanceSettings()
 {
-    for(auto instance : qAsConst(styleInstances))
+    for(auto instance : std::as_const(styleInstances))
         instance->reloadSettings();
 }
