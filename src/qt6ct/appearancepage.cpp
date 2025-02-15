@@ -106,11 +106,11 @@ void AppearancePage::writeSettings(QSettings *settings)
     settings->beginGroup("Appearance");
     settings->setValue("style", m_ui->styleComboBox->currentText());
 
-    if(m_ui->colorSchemeComboBox->currentData().toString() == QStringLiteral("system"))
+    if(m_ui->colorSchemeComboBox->currentData().toString() == QLatin1String("system"))
     {
         settings->setValue("custom_palette", false);
     }
-    else if(m_ui->colorSchemeComboBox->currentData().toString() == QStringLiteral("style"))
+    else if(m_ui->colorSchemeComboBox->currentData().toString() == QLatin1String("style"))
     {
         settings->setValue("custom_palette", true);
         settings->setValue("color_scheme_path", Qt6CT::styleColorSchemeFile());
