@@ -22,5 +22,5 @@ curl --location --header "PRIVATE-TOKEN: ${TOKEN}" \
 curl --request POST \
      --header "PRIVATE-TOKEN: ${TOKEN}" \
      --data name="${TARBALL}" \
-     --data url=${URL}.tst \
+     --data url=${URL} \
      "https://www.opencode.net/api/v4/projects/${ID}/releases/${VERSION}/assets/links"
