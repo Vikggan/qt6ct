@@ -2,6 +2,7 @@
 
 if [ -z $1 ] || [ -z $2 ]; then
    echo Usage: gitlab-upload VERSION TOKEN
+   exit
 fi
 
 ID=5459
