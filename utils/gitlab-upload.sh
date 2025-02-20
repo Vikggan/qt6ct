@@ -24,3 +24,5 @@ curl --request POST \
      --data name="${TARBALL}" \
      --data url=${URL} \
      "https://www.opencode.net/api/v4/projects/${ID}/releases/${VERSION}/assets/links"
+
+echo ""
