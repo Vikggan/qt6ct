@@ -305,6 +305,8 @@ void Qt6CTPlatformTheme::readSettings()
             m_uiEffects |= QPlatformTheme::AnimateToolBoxUiEffect;
     }
 
+    m_uiEffects |= QPlatformTheme::HoverEffect;
+
     //load style sheets
 #ifdef QT_WIDGETS_LIB
     QStringList qssPaths = settings.value("stylesheets").toStringList();
