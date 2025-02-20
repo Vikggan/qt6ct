@@ -135,7 +135,7 @@
     <message>
         <location filename="../appearancepage.cpp" line="371"/>
         <source>Style&apos;s colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвета стиля</translation>
     </message>
 </context>
 <context>

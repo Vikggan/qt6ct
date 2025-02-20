@@ -89,14 +89,14 @@
         <location filename="../appearancepage.cpp" line="260"/>
         <location filename="../appearancepage.cpp" line="290"/>
         <source>Error</source>
-        <translation>Fout</translation>
+        <translation>Foutmelding</translation>
     </message>
     <message>
         <location filename="../appearancepage.cpp" line="176"/>
         <location filename="../appearancepage.cpp" line="252"/>
         <location filename="../appearancepage.cpp" line="290"/>
         <source>The color scheme &quot;%1&quot; already exists</source>
-        <translation>Het kleurenschema “%1” bestaat al</translation>
+        <translation>“%1” bestaat al</translation>
     </message>
     <message>
         <location filename="../appearancepage.cpp" line="194"/>
@@ -110,7 +110,7 @@
         <location filename="../appearancepage.cpp" line="217"/>
         <location filename="../appearancepage.cpp" line="275"/>
         <source>The color scheme &quot;%1&quot; is read only</source>
-        <translation>Het kleurenschema “%1” is alleen-lezen</translation>
+        <translation>“%1” is alleen-lezen</translation>
     </message>
     <message>
         <location filename="../appearancepage.cpp" line="222"/>
@@ -135,7 +135,7 @@
     <message>
         <location filename="../appearancepage.cpp" line="371"/>
         <source>Style&apos;s colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Stijlkleuren</translation>
     </message>
 </context>
 <context>
@@ -251,7 +251,7 @@
     <message>
         <location filename="../fontspage.cpp" line="110"/>
         <source>Remove Font Configuration</source>
-        <translation>Lettertypeconfiguatie verwijderen</translation>
+        <translation>Lettertypeinstellingen verwijderen</translation>
     </message>
     <message>
         <location filename="../fontspage.cpp" line="111"/>
@@ -322,7 +322,7 @@
     <message>
         <location filename="../interfacepage.ui" line="175"/>
         <source>Enable gui effects</source>
-        <translation>Effecten inschakelen</translation>
+        <translation>Effecten gebruiken</translation>
     </message>
     <message>
         <location filename="../interfacepage.ui" line="182"/>
@@ -465,7 +465,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="126"/>
         <source>The &lt;b&gt;QT_QPA_PLATFORMTHEME&lt;/b&gt; environment variable is not set (required values: &lt;b&gt;qt6ct&lt;/b&gt; or &lt;b&gt;qt5ct&lt;/b&gt;).</source>
-        <translation>De &lt;b&gt;QT_QPA_PLATFORMTHEME&lt;/b&gt;-omgevingsvariabel is niet juist ingesteld. Vereiste waarden: &lt;b&gt;qt6ct&lt;/b&gt; of &lt;b&gt;qt5ct&lt;/b&gt;.</translation>
+        <translation>De &lt;b&gt;QT_QPA_PLATFORMTHEME&lt;/b&gt;-omgevingsvariabele is niet goed ingesteld. Vereiste waarden: &lt;b&gt;qt6ct&lt;/b&gt; of &lt;b&gt;qt5ct&lt;/b&gt;.</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="131"/>
@@ -623,7 +623,7 @@
     <message>
         <location filename="../paletteeditdialog.cpp" line="93"/>
         <source>Placeholder text</source>
-        <translation>Plaatshoudertekst</translation>
+        <translation>Opvultekst</translation>
     </message>
     <message>
         <location filename="../paletteeditdialog.cpp" line="97"/>
@@ -633,7 +633,7 @@
     <message>
         <location filename="../paletteeditdialog.cpp" line="110"/>
         <source>Select Color</source>
-        <translation>Kleur selecteren</translation>
+        <translation>Kleur kiezen</translation>
     </message>
 </context>
 <context>
@@ -742,7 +742,7 @@
     <message>
         <location filename="../qsspage.cpp" line="116"/>
         <source>The file &quot;%1&quot; already exists</source>
-        <translation>Het bestand “%1” bestaat al</translation>
+        <translation>“%1” bestaat al</translation>
     </message>
     <message>
         <location filename="../qsspage.cpp" line="150"/>
@@ -768,7 +768,7 @@
         <location filename="../qsspage.cpp" line="217"/>
         <location filename="../qsspage.cpp" line="262"/>
         <source>The style sheet &quot;%1&quot; already exists</source>
-        <translation>Het stijlblad “%1” bestaat al</translation>
+        <translation>“%1” bestaat al</translation>
     </message>
     <message>
         <location filename="../qsspage.cpp" line="225"/>
@@ -811,7 +811,7 @@
     <message>
         <location filename="../troubleshootingpage.ui" line="82"/>
         <source>Make top-level widgets use pure raster surfaces, and do not support non-native GL-based child widgets.</source>
-        <translation>Dit zorgt er voor dat zichtbare elementen worden uitgelijnd op een rooster en geen ondersteuning hebben voor onderliggende OpenGL-widgets.</translation>
+        <translation>Dit zorgt ervoor dat zichtbare elementen worden uitgelijnd op een rooster en geen ondersteuning hebben voor onderliggende OpenGL-widgets.</translation>
     </message>
     <message>
         <location filename="../troubleshootingpage.ui" line="85"/>
