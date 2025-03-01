@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.18.0)
 
 project(qt6ct LANGUAGES CXX)
 
+if(POLICY CMP0175)
+    cmake_policy(SET CMP0175 NEW)
+endif()
+
 include(GNUInstallDirs)
 
 configure_file(
@@ -82,6 +86,7 @@ if(UNIX)
     add_custom_target(distclean @echo cleaning for source distribution)
 
     add_custom_command(
+        POST_BUILD
         COMMENT "distribution clean"
         COMMAND make
         ARGS -C ${CMAKE_CURRENT_BINARY_DIR} clean
