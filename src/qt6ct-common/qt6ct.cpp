@@ -47,31 +47,31 @@ void Qt6CT::initConfig()
     if(QFile::exists(configFile()))
         return;
 
-    QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericConfigLocation, "qt6ct/qt6ct.conf");
+    QString globalConfig = QStandardPaths::locate(QStandardPaths::GenericConfigLocation, u"qt6ct/qt6ct.conf"_s);
     if(globalConfig.isEmpty())
         return;
 
-    QDir("/").mkpath(configPath());
+    QDir::root().mkpath(configPath());
     QFile::copy(globalConfig, configFile());
 }
 
 QString Qt6CT::configPath()
 {
-    return QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1String("/qt6ct");
+    return QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QStringLiteral("/qt6ct");
 }
 
 QString Qt6CT::configFile()
 {
-    return configPath() + QLatin1String("/qt6ct.conf");
+    return configPath() + QStringLiteral("/qt6ct.conf");
 }
 
 QStringList Qt6CT::iconPaths()
 {
-    QStringList paths = { QDir::homePath() + QLatin1String("/.icons") };
+    QStringList paths = { QDir::homePath() + QStringLiteral("/.icons") };
 
     for(const QString &p : QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation))
     {
-        paths << (p + QLatin1String("/icons"));
+        paths << (p + QStringLiteral("/icons"));
     }
     paths.removeDuplicates();
 
@@ -90,7 +90,7 @@ QStringList Qt6CT::iconPaths()
 
 QString Qt6CT::userStyleSheetPath()
 {
-    return configPath() + QLatin1String("/qss");
+    return configPath() + QStringLiteral("/qss");
 }
 
 QStringList Qt6CT::sharedStyleSheetPaths()
@@ -98,21 +98,21 @@ QStringList Qt6CT::sharedStyleSheetPaths()
     QStringList paths;
     for(const QString &p : QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation))
     {
-        paths << (p + QLatin1String("/qt6ct/qss"));
+        paths << (p + QStringLiteral("/qt6ct/qss"));
     }
-    paths << QLatin1String(QT6CT_DATADIR"/qt6ct/qss");
+    paths << QStringLiteral(QT6CT_DATADIR"/qt6ct/qss");
     paths.removeDuplicates();
     return paths;
 }
 
 QString Qt6CT::userColorSchemePath()
 {
-    return configPath() + QLatin1String("/colors");
+    return configPath() + QStringLiteral("/colors");
 }
 
 QString Qt6CT::styleColorSchemeFile()
 {
-    return configPath() + QLatin1String("/style-colors.conf");
+    return configPath() + QStringLiteral("/style-colors.conf");
 }
 
 QStringList Qt6CT::sharedColorSchemePaths()
@@ -120,9 +120,9 @@ QStringList Qt6CT::sharedColorSchemePaths()
     QStringList paths;
     for(const QString &p : QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation))
     {
-        paths << (p + QLatin1String("/qt6ct/colors"));
+        paths << (p + QStringLiteral("/qt6ct/colors"));
     }
-    paths << QLatin1String(QT6CT_DATADIR"/qt6ct/colors");
+    paths << QStringLiteral(QT6CT_DATADIR"/qt6ct/colors");
     paths.removeDuplicates();
     return paths;
 }
@@ -130,19 +130,19 @@ QStringList Qt6CT::sharedColorSchemePaths()
 QString Qt6CT::resolvePath(const QString &path)
 {
     QString tmp = path;
-    tmp.replace("~", QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
-    if(!tmp.contains("$"))
+    tmp.replace(QLatin1Char('~'), QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
+    if(!tmp.contains(QLatin1Char('$')))
         return tmp;
 
     //find environment variables
-    static const QRegularExpression regexp("\\$([A-Z_]+)\\/");
+    static const QRegularExpression regexp(u"\\$([A-Z_]+)\\/"_s);
     QRegularExpressionMatchIterator it = regexp.globalMatch(tmp);
 
     while (it.hasNext())
     {
         QRegularExpressionMatch match = it.next();
         QString captured = match.captured(1);
-        tmp.replace(QLatin1String("$") + captured, qgetenv(captured.toLatin1().constData()) );
+        tmp.replace(QStringLiteral("$") + captured, qEnvironmentVariable(captured.toLatin1().constData()));
     }
 
     return tmp;
@@ -152,10 +152,10 @@ QPalette Qt6CT::loadColorScheme(const QString &filePath, const QPalette &fallbac
 {
     QPalette customPalette;
     QSettings settings(filePath, QSettings::IniFormat);
-    settings.beginGroup("ColorScheme");
-    QStringList activeColors = settings.value("active_colors").toStringList();
-    QStringList inactiveColors = settings.value("inactive_colors").toStringList();
-    QStringList disabledColors = settings.value("disabled_colors").toStringList();
+    settings.beginGroup("ColorScheme"_L1);
+    QStringList activeColors = settings.value("active_colors"_L1).toStringList();
+    QStringList inactiveColors = settings.value("inactive_colors"_L1).toStringList();
+    QStringList disabledColors = settings.value("disabled_colors"_L1).toStringList();
     settings.endGroup();
 
 

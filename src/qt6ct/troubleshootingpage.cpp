@@ -60,7 +60,7 @@ void TroubleshootingPage::writeSettings(QSettings *settings)
 
 void TroubleshootingPage::on_addAppButton_clicked()
 {
-    QString path = QFileDialog::getOpenFileName(this, tr("Select Application"), "/usr/bin", tr("Executable files (*)"));
+    QString path = QFileDialog::getOpenFileName(this, tr("Select Application"), u"/usr/bin"_s, tr("Executable files (*)"));
     if(!path.isEmpty())
         m_ui->ignoredAppsListWidget->addItem(path);
 }
@@ -74,8 +74,8 @@ void TroubleshootingPage::readSettings()
 {
     m_ui->ignoredAppsListWidget->clear();
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    settings.beginGroup("Troubleshooting");
-    m_ui->ignoredAppsListWidget->addItems(settings.value("ignored_applications").toStringList());
-    m_ui->forceRasterCheckBox->setCheckState(Qt::CheckState(settings.value("force_raster_widgets", Qt::PartiallyChecked).toInt()));
+    settings.beginGroup("Troubleshooting"_L1);
+    m_ui->ignoredAppsListWidget->addItems(settings.value("ignored_applications"_L1).toStringList());
+    m_ui->forceRasterCheckBox->setCheckState(Qt::CheckState(settings.value("force_raster_widgets"_L1, Qt::PartiallyChecked).toInt()));
     settings.endGroup();
 }

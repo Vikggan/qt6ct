@@ -49,8 +49,8 @@ FontsPage::FontsPage(QWidget *parent) :
     readSettings();
 
     //icons
-    m_ui->createFontsConfButton->setIcon(QIcon::fromTheme("document-new"));
-    m_ui->removeFontsConfButton->setIcon(QIcon::fromTheme("edit-delete"));
+    m_ui->createFontsConfButton->setIcon(QIcon::fromTheme(u"document-new"_s));
+    m_ui->removeFontsConfButton->setIcon(QIcon::fromTheme(u"edit-delete"_s));
 }
 
 FontsPage::~FontsPage()
@@ -60,9 +60,9 @@ FontsPage::~FontsPage()
 
 void FontsPage::writeSettings(QSettings *settings)
 {
-    settings->beginGroup("Fonts");
-    settings->setValue("general", m_ui->generalFontLabel->font().toString());
-    settings->setValue("fixed", m_ui->fixedFontLabel->font().toString());
+    settings->beginGroup(u"Fonts"_s);
+    settings->setValue(u"general"_s, m_ui->generalFontLabel->font().toString());
+    settings->setValue(u"fixed"_s, m_ui->fixedFontLabel->font().toString());
     settings->endGroup();
 }
 
@@ -73,16 +73,16 @@ void FontsPage::onFontChangeRequested(QWidget *widget)
     if(ok)
     {
         widget->setFont(font);
-        qobject_cast<QLabel*>(widget)->setText(font.family () + " " + QString::number(font.pointSize ()));
+        qobject_cast<QLabel*>(widget)->setText(font.family () + QChar::Space + QString::number(font.pointSize ()));
     }
 }
 
 void FontsPage::readSettings()
 {
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    settings.beginGroup("Fonts");
-    loadFont(&settings, m_ui->generalFontLabel, "general");
-    loadFont(&settings, m_ui->fixedFontLabel, "fixed");
+    settings.beginGroup("Fonts"_L1);
+    loadFont(&settings, m_ui->generalFontLabel, u"general"_s);
+    loadFont(&settings, m_ui->fixedFontLabel, u"fixed"_s);
     settings.endGroup();
 }
 
@@ -90,7 +90,7 @@ void FontsPage::loadFont(QSettings *settings, QLabel *label, const QString &key)
 {
     QFont font = QApplication::font();
     font.fromString(settings->value(key, QApplication::font().toString()).toString());
-    label->setText(font.family() + " " + QString::number(font.pointSize()));
+    label->setText(font.family() + QChar::Space + QString::number(font.pointSize()));
     label->setFont(font);
 }
 
@@ -102,7 +102,7 @@ void FontsPage::on_createFontsConfButton_clicked()
 
 void FontsPage::on_removeFontsConfButton_clicked()
 {
-    QString path = QDir::homePath() + "/.config/fontconfig/fonts.conf";
+    QString path = QDir::homePath() + u"/.config/fontconfig/fonts.conf"_s;
 
 
     if(QFile::exists(path))
@@ -114,8 +114,8 @@ void FontsPage::on_removeFontsConfButton_clicked()
             return;
         }
 
-        QFile::remove(path + ".back");
-        QFile::copy(path, path + ".back");
+        QFile::remove(path + u".back"_s);
+        QFile::copy(path, path + u".back"_s);
         QFile::remove(path);
     }
 }

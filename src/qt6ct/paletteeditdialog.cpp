@@ -50,7 +50,7 @@ PaletteEditDialog::PaletteEditDialog(const QPalette &palette, QStyle *currentSty
     setPalette(palette);
 
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    restoreGeometry(settings.value("PaletteEditor/geometry").toByteArray());
+    restoreGeometry(settings.value("PaletteEditor/geometry"_L1).toByteArray());
 }
 
 PaletteEditDialog::~PaletteEditDialog()

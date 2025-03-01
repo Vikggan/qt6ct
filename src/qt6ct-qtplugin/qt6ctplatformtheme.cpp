@@ -62,15 +62,15 @@ Qt6CTPlatformTheme::Qt6CTPlatformTheme()
     if(QGuiApplication::desktopSettingsAware())
     {
         readSettings();
-        QMetaObject::invokeMethod(this, "applySettings", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &Qt6CTPlatformTheme::applySettings, Qt::QueuedConnection);
 #ifdef QT_WIDGETS_LIB
-        QMetaObject::invokeMethod(this, "createFSWatcher", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &Qt6CTPlatformTheme::createFSWatcher, Qt::QueuedConnection);
 #endif
         QGuiApplication::setFont(m_generalFont);
     }
     qCDebug(lqt6ct) << "using qt6ct plugin";
 #ifdef QT_WIDGETS_LIB
-    if(!QStyleFactory::keys().contains("qt6ct-style"))
+    if(!QStyleFactory::keys().contains(u"qt6ct-style"_s))
         qCCritical(lqt6ct) << "unable to find qt6ct proxy style";
 #endif
 }
@@ -120,8 +120,7 @@ QVariant Qt6CTPlatformTheme::themeHint(QPlatformTheme::ThemeHint hint) const
     case QPlatformTheme::SystemIconThemeName:
         return m_iconTheme;
     case QPlatformTheme::StyleNames:
-        qDebug() << Q_FUNC_INFO;
-        return QStringList() << "qt6ct-style";
+        return { u"qt6ct-style"_s };
     case QPlatformTheme::IconThemeSearchPaths:
         return Qt6CT::iconPaths();
     case QPlatformTheme::DialogButtonBoxLayout:
@@ -237,71 +236,71 @@ void Qt6CTPlatformTheme::readSettings()
 {
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
 
-    settings.beginGroup("Appearance");
-    m_style = settings.value("style", "Fusion").toString();
+    settings.beginGroup("Appearance"_L1);
+    m_style = settings.value("style"_L1, u"Fusion"_s).toString();
     m_palette = *QPlatformTheme::palette(SystemPalette);
-    QString schemePath = settings.value("color_scheme_path").toString();
-    if(!schemePath.isEmpty() && settings.value("custom_palette", false).toBool())
+    QString schemePath = settings.value("color_scheme_path"_L1).toString();
+    if(!schemePath.isEmpty() && settings.value("custom_palette"_L1, false).toBool())
     {
         schemePath = Qt6CT::resolvePath(schemePath); //replace environment variables
         m_palette = Qt6CT::loadColorScheme(schemePath, m_palette);
     }
-    m_iconTheme = settings.value("icon_theme").toString();
+    m_iconTheme = settings.value("icon_theme"_L1).toString();
     //load dialogs
     if(!m_update)
     {
         //do not mix gtk2 style and gtk3 dialogs
         QStringList keys = QPlatformThemeFactory::keys();
-        QString dialogs = settings.value("standard_dialogs", "default").toString();
+        QString dialogs = settings.value("standard_dialogs"_L1, u"default"_s).toString();
 
-        if(m_style.endsWith("gtk2") && dialogs == QLatin1String("gtk3"))
-            dialogs = QLatin1String("gtk2");
+        if(m_style.endsWith(u"gtk2"_s) && dialogs == QLatin1String("gtk3"))
+            dialogs = u"gtk2"_s;
         if(keys.contains(dialogs))
             m_theme.reset(QPlatformThemeFactory::create(dialogs));
     }
 
     settings.endGroup();
 
-    settings.beginGroup("Fonts");
+    settings.beginGroup("Fonts"_L1);
     m_generalFont = QGuiApplication::font();
-    m_generalFont.fromString(settings.value("general", QGuiApplication::font()).toString());
+    m_generalFont.fromString(settings.value("general"_L1, QGuiApplication::font()).toString());
     m_fixedFont = QGuiApplication::font();
-    m_fixedFont.fromString(settings.value("fixed", QGuiApplication::font()).toString());
+    m_fixedFont.fromString(settings.value("fixed"_L1, QGuiApplication::font()).toString());
     settings.endGroup();
 
-    settings.beginGroup("Interface");
+    settings.beginGroup("Interface"_L1);
     m_doubleClickInterval = QGenericUnixTheme::themeHint(QPlatformTheme::MouseDoubleClickInterval).toInt();
-    m_doubleClickInterval = settings.value("double_click_interval", m_doubleClickInterval).toInt();
+    m_doubleClickInterval = settings.value("double_click_interval"_L1, m_doubleClickInterval).toInt();
     m_cursorFlashTime = QGenericUnixTheme::themeHint(QPlatformTheme::CursorFlashTime).toInt();
-    m_cursorFlashTime = settings.value("cursor_flash_time", m_cursorFlashTime).toInt();
-    m_showShortcutsInContextMenus = settings.value("show_shortcuts_in_context_menus", true).toBool();
+    m_cursorFlashTime = settings.value("cursor_flash_time"_L1, m_cursorFlashTime).toInt();
+    m_showShortcutsInContextMenus = settings.value("show_shortcuts_in_context_menus"_L1, true).toBool();
     m_buttonBoxLayout = QGenericUnixTheme::themeHint(QPlatformTheme::DialogButtonBoxLayout).toInt();
-    m_buttonBoxLayout = settings.value("buttonbox_layout", m_buttonBoxLayout).toInt();
+    m_buttonBoxLayout = settings.value("buttonbox_layout"_L1, m_buttonBoxLayout).toInt();
     m_keyboardScheme = QGenericUnixTheme::themeHint(QPlatformTheme::KeyboardScheme).toInt();
-    m_keyboardScheme = settings.value("keyboard_scheme", m_keyboardScheme).toInt();
-    QCoreApplication::setAttribute(Qt::AA_DontShowIconsInMenus, !settings.value("menus_have_icons", true).toBool());
-    m_toolButtonStyle = settings.value("toolbutton_style", Qt::ToolButtonFollowStyle).toInt();
-    m_wheelScrollLines = settings.value("wheel_scroll_lines", 3).toInt();
+    m_keyboardScheme = settings.value("keyboard_scheme"_L1, m_keyboardScheme).toInt();
+    QCoreApplication::setAttribute(Qt::AA_DontShowIconsInMenus, !settings.value("menus_have_icons"_L1, true).toBool());
+    m_toolButtonStyle = settings.value("toolbutton_style"_L1, Qt::ToolButtonFollowStyle).toInt();
+    m_wheelScrollLines = settings.value("wheel_scroll_lines"_L1, 3).toInt();
 
     //load effects
     m_uiEffects = QGenericUnixTheme::themeHint(QPlatformTheme::UiEffects).toInt();
-    if(settings.childKeys().contains("gui_effects"))
+    if(settings.childKeys().contains(u"gui_effects"_s))
     {
-        QStringList effectList = settings.value("gui_effects").toStringList();
+        QStringList effectList = settings.value("gui_effects"_L1).toStringList();
         m_uiEffects = 0;
-        if(effectList.contains("General"))
+        if(effectList.contains(u"General"_s))
             m_uiEffects |= QPlatformTheme::GeneralUiEffect;
-        if(effectList.contains("AnimateMenu"))
+        if(effectList.contains(u"AnimateMenu"_s))
             m_uiEffects |= QPlatformTheme::AnimateMenuUiEffect;
-        if(effectList.contains("FadeMenu"))
+        if(effectList.contains(u"FadeMenu"_s))
             m_uiEffects |= QPlatformTheme::FadeMenuUiEffect;
-        if(effectList.contains("AnimateCombo"))
+        if(effectList.contains(u"AnimateCombo"_s))
             m_uiEffects |= QPlatformTheme::AnimateComboUiEffect;
-        if(effectList.contains("AnimateTooltip"))
+        if(effectList.contains(u"AnimateTooltip"_s))
             m_uiEffects |= QPlatformTheme::AnimateTooltipUiEffect;
-        if(effectList.contains("FadeTooltip"))
+        if(effectList.contains(u"FadeTooltip"_s))
             m_uiEffects |= QPlatformTheme::FadeTooltipUiEffect;
-        if(effectList.contains("AnimateToolBox"))
+        if(effectList.contains(u"AnimateToolBox"_s))
             m_uiEffects |= QPlatformTheme::AnimateToolBoxUiEffect;
     }
 
@@ -309,7 +308,7 @@ void Qt6CTPlatformTheme::readSettings()
 
     //load style sheets
 #ifdef QT_WIDGETS_LIB
-    QStringList qssPaths = settings.value("stylesheets").toStringList();
+    QStringList qssPaths = settings.value("stylesheets"_L1).toStringList();
     m_userStyleSheet = loadStyleSheets(qssPaths);
 #endif
     settings.endGroup();
@@ -317,9 +316,9 @@ void Qt6CTPlatformTheme::readSettings()
     //load troubleshooting
     if(!m_update)
     {
-        settings.beginGroup("Troubleshooting");
-        m_isIgnored = settings.value("ignored_applications").toStringList().contains(QCoreApplication::applicationFilePath());
-        int forceRasterWidgets = settings.value("force_raster_widgets", Qt::PartiallyChecked).toInt();
+        settings.beginGroup("Troubleshooting"_L1);
+        m_isIgnored = settings.value("ignored_applications"_L1).toStringList().contains(QCoreApplication::applicationFilePath());
+        int forceRasterWidgets = settings.value("force_raster_widgets"_L1, Qt::PartiallyChecked).toInt();
         if(!m_isIgnored && forceRasterWidgets == Qt::Checked)
             QCoreApplication::setAttribute(Qt::AA_ForceRasterWidgets, true);
         else if(!m_isIgnored && forceRasterWidgets == Qt::Unchecked)
@@ -349,7 +348,7 @@ QString Qt6CTPlatformTheme::loadStyleSheets(const QStringList &paths)
         if(!content.endsWith(QChar::LineFeed))
             content.append(QChar::LineFeed);
     }
-    static const QRegularExpression regExp("//.*\n");
-    content.replace(regExp, "\n");
+    static const QRegularExpression regExp(u"//.*\n"_s);
+    content.replace(regExp, u"\n"_s);
     return content;
 }

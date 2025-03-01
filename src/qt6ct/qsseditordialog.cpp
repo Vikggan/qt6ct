@@ -53,7 +53,7 @@ QSSEditorDialog::QSSEditorDialog(const QString &filePath, QWidget *parent) :
     }
 
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    restoreGeometry(settings.value("QSSEditor/geometry").toByteArray());
+    restoreGeometry(settings.value("QSSEditor/geometry"_L1).toByteArray());
 }
 
 QSSEditorDialog::~QSSEditorDialog()
