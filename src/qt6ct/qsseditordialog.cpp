@@ -71,7 +71,7 @@ void QSSEditorDialog::save()
 void QSSEditorDialog::hideEvent(QHideEvent *)
 {
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    settings.setValue("QSSEditor/geometry", saveGeometry());
+    settings.setValue("QSSEditor/geometry"_L1, saveGeometry());
 }
 
 void QSSEditorDialog::on_buttonBox_clicked(QAbstractButton *button)

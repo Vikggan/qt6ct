@@ -47,14 +47,14 @@ TroubleshootingPage::~TroubleshootingPage()
 
 void TroubleshootingPage::writeSettings(QSettings *settings)
 {
-    settings->beginGroup("Troubleshooting");
+    settings->beginGroup("Troubleshooting"_L1);
 
     QStringList ignoredApps;
     for(int i = 0; i < m_ui->ignoredAppsListWidget->count(); ++i)
         ignoredApps << m_ui->ignoredAppsListWidget->item(i)->text();
 
-    settings->setValue("ignored_applications", ignoredApps);
-    settings->setValue("force_raster_widgets", m_ui->forceRasterCheckBox->checkState());
+    settings->setValue("ignored_applications"_L1, ignoredApps);
+    settings->setValue("force_raster_widgets"_L1, m_ui->forceRasterCheckBox->checkState());
     settings->endGroup();
 }
 

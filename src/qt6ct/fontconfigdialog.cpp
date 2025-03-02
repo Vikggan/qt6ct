@@ -94,11 +94,11 @@ void FontConfigDialog::accept()
     stream.setAutoFormatting(true);
 
     stream.writeStartDocument();
-    stream.writeDTD("<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">");
-    stream.writeStartElement("fontconfig");
+    stream.writeDTD("<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">"_L1);
+    stream.writeStartElement("fontconfig"_L1);
 
-    stream.writeStartElement("match");
-    stream.writeAttribute("target", "font");
+    stream.writeStartElement("match"_L1);
+    stream.writeAttribute("target"_L1, "font"_L1);
     writeOption(&stream, u"antialias"_s, m_ui->antialisingCheckBox->isChecked());
     writeOption(&stream, u"hinting"_s, m_ui->hintingCheckBox->isChecked());
     writeOption(&stream, u"hintstyle"_s, m_ui->hintingStyleComboBox->currentData().toString());
@@ -110,13 +110,13 @@ void FontConfigDialog::accept()
 
     if(m_ui->disableBoldAutohintCheckBox->isChecked())
     {
-        stream.writeStartElement("match");
-        stream.writeAttribute("target", "font");
+        stream.writeStartElement("match"_L1);
+        stream.writeAttribute("target"_L1, "font"_L1);
 
-        stream.writeStartElement("test");
-        stream.writeAttribute("name", "weight");
-        stream.writeAttribute("compare", "more");
-        stream.writeTextElement("const", "medium");
+        stream.writeStartElement("test"_L1);
+        stream.writeAttribute("name"_L1, "weight"_L1);
+        stream.writeAttribute("compare"_L1, "more"_L1);
+        stream.writeTextElement("const"_L1, "medium"_L1);
         stream.writeEndElement();
 
         writeOption(&stream, u"autohint"_s, m_ui->autohinterCheckBox->isChecked());
@@ -131,14 +131,14 @@ void FontConfigDialog::accept()
 
 void FontConfigDialog::writeOption(QXmlStreamWriter *stream, const QString &name, const QVariant &value)
 {
-    stream->writeStartElement("edit");
-    stream->writeAttribute("name", name);
-    stream->writeAttribute("mode", "assign");
+    stream->writeStartElement("edit"_L1);
+    stream->writeAttribute("name"_L1, name);
+    stream->writeAttribute("mode"_L1, "assign"_L1);
     if(value.typeId() == QMetaType::QString)
-        stream->writeTextElement("const", value.toString());
+        stream->writeTextElement("const"_L1, value.toString());
     else if(value.typeId() == QMetaType::Int)
-        stream->writeTextElement("double", QString::number(value.toInt()));
+        stream->writeTextElement("double"_L1, QString::number(value.toInt()));
     else if(value.typeId() == QMetaType::Bool)
-        stream->writeTextElement("bool", value.toBool() ? QStringLiteral("true") : QStringLiteral("false"));
+        stream->writeTextElement("bool"_L1, value.toBool() ? QStringLiteral("true") : QStringLiteral("false"));
     stream->writeEndElement();
 }

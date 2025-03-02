@@ -102,7 +102,7 @@ void PaletteEditDialog::setPalette(const QPalette &palette)
 void PaletteEditDialog::hideEvent(QHideEvent *)
 {
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    settings.setValue("PaletteEditor/geometry", saveGeometry());
+    settings.setValue("PaletteEditor/geometry"_L1, saveGeometry());
 }
 
 void PaletteEditDialog::on_tableWidget_itemClicked(QTableWidgetItem *item)

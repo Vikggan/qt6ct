@@ -68,7 +68,7 @@ void IconThemePage::writeSettings(QSettings *settings)
 {
     QTreeWidgetItem *item = m_ui->treeWidget->currentItem();
     if(item)
-        settings->setValue("Appearance/icon_theme", item->data(3, Qt::UserRole));
+        settings->setValue("Appearance/icon_theme"_L1, item->data(3, Qt::UserRole));
 }
 
 void IconThemePage::onFinished()

@@ -103,26 +103,26 @@ AppearancePage::~AppearancePage()
 
 void AppearancePage::writeSettings(QSettings *settings)
 {
-    settings->beginGroup("Appearance");
-    settings->setValue("style", m_ui->styleComboBox->currentText());
+    settings->beginGroup("Appearance"_L1);
+    settings->setValue("style"_L1, m_ui->styleComboBox->currentText());
 
     if(m_ui->colorSchemeComboBox->currentData().toString() == QLatin1String("system"))
     {
-        settings->setValue("custom_palette", false);
+        settings->setValue("custom_palette"_L1, false);
     }
     else if(m_ui->colorSchemeComboBox->currentData().toString() == QLatin1String("style"))
     {
-        settings->setValue("custom_palette", true);
-        settings->setValue("color_scheme_path", Qt6CT::styleColorSchemeFile());
+        settings->setValue("custom_palette"_L1, true);
+        settings->setValue("color_scheme_path"_L1, Qt6CT::styleColorSchemeFile());
         createColorScheme(Qt6CT::styleColorSchemeFile(), m_previewWidget->palette());
     }
     else
     {
-        settings->setValue("custom_palette", true);
-        settings->setValue("color_scheme_path", m_ui->colorSchemeComboBox->currentData().toString());
+        settings->setValue("custom_palette"_L1, true);
+        settings->setValue("color_scheme_path"_L1, m_ui->colorSchemeComboBox->currentData().toString());
     }
 
-    settings->setValue("standard_dialogs", m_ui->dialogComboBox->currentData().toString());
+    settings->setValue("standard_dialogs"_L1, m_ui->dialogComboBox->currentData().toString());
     settings->endGroup();
 }
 

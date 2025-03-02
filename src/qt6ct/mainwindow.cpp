@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowIcon(QIcon::fromTheme(u"preferences-desktop-theme"_s));
 
-    m_ui->versionLabel->setText(tr("Version: %1").arg(QT6CT_VERSION_STR));
+    m_ui->versionLabel->setText(tr("Version: %1").arg(QStringLiteral(QT6CT_VERSION_STR)));
     m_ui->warningIconLabel->setPixmap(qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(16, 16));
 
     checkConfiguration();
@@ -141,6 +141,7 @@ void MainWindow::checkConfiguration()
     QVersionNumber v = QLibraryInfo::version();
     if(v.majorVersion() != QT_VERSION_MAJOR || v.minorVersion() != QT_VERSION_MINOR)
     {
-        m_errors << tr("The <b>%1</b> plugin is compiled against incompatible Qt version (%2).").arg("libqt6ct.so", QT_VERSION_STR);
+        m_errors << tr("The <b>%1</b> plugin is compiled against incompatible Qt version (%2).")
+                    .arg(QStringLiteral("libqt6ct.so"), QStringLiteral(QT_VERSION_STR));
     }
 }
