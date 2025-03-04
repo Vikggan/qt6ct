@@ -78,4 +78,4 @@ libqt6ct-common.so - qt6ct shared library
 
 Translation:
 
-Use Transifex service: https://www.transifex.com/projects/p/qt6ct/
+Use Transifex service: https://explore.transifex.com/qt-configuration-tool/qt6ct/
