@@ -142,7 +142,7 @@
     <name>FontConfigDialog</name>
     <message>
         <location filename="../fontconfigdialog.ui" line="14"/>
-        <location filename="../fontconfigdialog.cpp" line="73"/>
+        <location filename="../fontconfigdialog.cpp" line="74"/>
         <source>Font Configuration</source>
         <translation>Configuration de la police</translation>
     </message>
@@ -192,28 +192,28 @@
         <translation>Style d’optimisation de rendu :</translation>
     </message>
     <message>
-        <location filename="../fontconfigdialog.cpp" line="42"/>
-        <location filename="../fontconfigdialog.cpp" line="47"/>
+        <location filename="../fontconfigdialog.cpp" line="43"/>
+        <location filename="../fontconfigdialog.cpp" line="48"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../fontconfigdialog.cpp" line="43"/>
+        <location filename="../fontconfigdialog.cpp" line="44"/>
         <source>Slight</source>
         <translation>Léger</translation>
     </message>
     <message>
-        <location filename="../fontconfigdialog.cpp" line="44"/>
+        <location filename="../fontconfigdialog.cpp" line="45"/>
         <source>Medium</source>
         <translation>Moyen</translation>
     </message>
     <message>
-        <location filename="../fontconfigdialog.cpp" line="45"/>
+        <location filename="../fontconfigdialog.cpp" line="46"/>
         <source>Full</source>
         <translation>Fort</translation>
     </message>
     <message>
-        <location filename="../fontconfigdialog.cpp" line="74"/>
+        <location filename="../fontconfigdialog.cpp" line="75"/>
         <source>&lt;i&gt;%1&lt;/i&gt; already exists. Do you want to replace it?</source>
         <translation>&lt;i&gt;%1&lt;/i&gt; existe déjà. Voulez-vous le remplacer ?</translation>
     </message>
