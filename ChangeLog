@@ -1,6 +1,16 @@
 Changelog of the Qt6 Configuration Tool
 -----------
 
+Version 0.10
+* reworked color settings
+* fixed issue with app-specific palette (John Lindgren)
+* fixed .desktop file name (Marcus Britanicus)
+* fixed CMake warning
+* enabled QPlatformTheme::HoverEffect hint
+* increased minimum Qt version to 6.2
+* refactoring
+* moved home page to opencode.net
+
 Version 0.9
 * added Qt 6.6 compatibility
 * added compatibility with QT_STYLE_OVERRIDE=qt5ct-style (RushingAlien)
