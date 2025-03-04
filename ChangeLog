@@ -8,8 +8,11 @@ Version 0.10
 * fixed CMake warning
 * enabled QPlatformTheme::HoverEffect hint
 * increased minimum Qt version to 6.2
-* refactoring
+* code refactoring and optimization
 * moved home page to opencode.net
+* updated Dutch translation (Heimen Stoffels)
+* updated Polish translation (Marek Adamski)
+* updated Russian translation
 
 Version 0.9
 * added Qt 6.6 compatibility
