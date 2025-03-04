@@ -11,7 +11,7 @@ VERSION=$1
 TOKEN=$2
 TARBALL=${NAME}-${VERSION}.tar.xz
 
-URL="https://www.opencode.net/api/v4/projects/${ID}/packages/generic/${NAME}/${VERSION}/${TARBALL}"
+URL="https://www.opencode.net/api/v4/project/${ID}/packages/generic/${NAME}/${VERSION}/${TARBALL}"
 
 echo URL = ${URL}
 
