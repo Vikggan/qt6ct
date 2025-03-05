@@ -81,20 +81,20 @@ Qt6CTPlatformTheme::~Qt6CTPlatformTheme()
 bool Qt6CTPlatformTheme::usePlatformNativeDialog(DialogType type) const
 {
     return m_theme ? m_theme->usePlatformNativeDialog(type) :
-                     QPlatformTheme::usePlatformNativeDialog(type);
+                     QGenericUnixTheme::usePlatformNativeDialog(type);
 }
 
 QPlatformDialogHelper *Qt6CTPlatformTheme::createPlatformDialogHelper(DialogType type) const
 {
     return m_theme ? m_theme->createPlatformDialogHelper(type) :
-                     QPlatformTheme::createPlatformDialogHelper(type);
+                     QGenericUnixTheme::createPlatformDialogHelper(type);
 }
 
 const QPalette *Qt6CTPlatformTheme::palette(QPlatformTheme::Palette type) const
 {
     if (type == QPlatformTheme::SystemPalette && !m_isIgnored)
         return &m_palette;
-    return QPlatformTheme::palette(type);
+    return QGenericUnixTheme::palette(type);
 }
 
 const QFont *Qt6CTPlatformTheme::font(QPlatformTheme::Font type) const
@@ -238,7 +238,7 @@ void Qt6CTPlatformTheme::readSettings()
 
     settings.beginGroup("Appearance"_L1);
     m_style = settings.value("style"_L1, u"Fusion"_s).toString();
-    m_palette = *QPlatformTheme::palette(SystemPalette);
+    m_palette = *QGenericUnixTheme::palette(SystemPalette);
     QString schemePath = settings.value("color_scheme_path"_L1).toString();
     if(!schemePath.isEmpty() && settings.value("custom_palette"_L1, false).toBool())
     {
