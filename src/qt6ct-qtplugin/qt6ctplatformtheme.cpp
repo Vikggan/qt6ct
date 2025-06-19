@@ -343,10 +343,12 @@ QString Qt6CTPlatformTheme::loadStyleSheets(const QStringList &paths)
             continue;
 
         QFile file(path);
-        file.open(QIODevice::ReadOnly);
-        content.append(QString::fromUtf8(file.readAll()));
-        if(!content.endsWith(QChar::LineFeed))
-            content.append(QChar::LineFeed);
+        if(file.open(QIODevice::ReadOnly))
+        {
+            content.append(QString::fromUtf8(file.readAll()));
+            if(!content.endsWith(QChar::LineFeed))
+                content.append(QChar::LineFeed);
+        }
     }
     static const QRegularExpression regExp(u"//.*\n"_s);
     content.replace(regExp, u"\n"_s);

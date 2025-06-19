@@ -119,8 +119,8 @@ void QSSPage::on_createButton_clicked()
 
     //creating empty file
     QFile file(filePath);
-    file.open(QIODevice::WriteOnly);
-    file.close();
+    if(file.open(QIODevice::WriteOnly))
+        file.close();
 
     //creating item
     QFileInfo info(filePath);

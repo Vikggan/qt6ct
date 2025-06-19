@@ -41,8 +41,8 @@ QSSEditorDialog::QSSEditorDialog(const QString &filePath, QWidget *parent) :
     m_filePath = filePath;
 
     QFile file(filePath);
-    file.open(QIODevice::ReadOnly);
-    m_ui->textEdit->setPlainText(QString::fromUtf8(file.readAll()));
+    if(file.open(QIODevice::ReadOnly))
+        m_ui->textEdit->setPlainText(QString::fromUtf8(file.readAll()));
     setWindowTitle(tr("%1 - Style Sheet Editor").arg(file.fileName()));
 
     QFileInfo info(filePath);
@@ -64,8 +64,8 @@ QSSEditorDialog::~QSSEditorDialog()
 void QSSEditorDialog::save()
 {
     QFile file(m_filePath);
-    file.open(QIODevice::WriteOnly);
-    file.write(m_ui->textEdit->toPlainText().toUtf8());
+    if(file.open(QIODevice::WriteOnly))
+        file.write(m_ui->textEdit->toPlainText().toUtf8());
 }
 
 void QSSEditorDialog::hideEvent(QHideEvent *)
