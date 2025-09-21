@@ -249,12 +249,12 @@
         <translation>Eliminar fonts.conf</translation>
     </message>
     <message>
-        <location filename="../fontspage.cpp" line="110"/>
+        <location filename="../fontspage.cpp" line="112"/>
         <source>Remove Font Configuration</source>
         <translation>Eliminar la configuración de los tipos de letra</translation>
     </message>
     <message>
-        <location filename="../fontspage.cpp" line="111"/>
+        <location filename="../fontspage.cpp" line="113"/>
         <source>Are you sure you want to delete &lt;i&gt;%1&lt;/i&gt;?</source>
         <translation>¿Seguro que quiere eliminar &lt;i&gt;%1&lt;/i&gt;?</translation>
     </message>

@@ -249,12 +249,12 @@
         <translation>Poista fonts.conf</translation>
     </message>
     <message>
-        <location filename="../fontspage.cpp" line="110"/>
+        <location filename="../fontspage.cpp" line="112"/>
         <source>Remove Font Configuration</source>
         <translation>Poista kirjasinasetukset</translation>
     </message>
     <message>
-        <location filename="../fontspage.cpp" line="111"/>
+        <location filename="../fontspage.cpp" line="113"/>
         <source>Are you sure you want to delete &lt;i&gt;%1&lt;/i&gt;?</source>
         <translation>Oletko varma, että haluat poistaa %1?</translation>
     </message>

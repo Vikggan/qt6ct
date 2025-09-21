@@ -249,12 +249,12 @@
         <translation>Supprimer  fonts.conf</translation>
     </message>
     <message>
-        <location filename="../fontspage.cpp" line="110"/>
+        <location filename="../fontspage.cpp" line="112"/>
         <source>Remove Font Configuration</source>
         <translation>Supprimer la configuration de la police</translation>
     </message>
     <message>
-        <location filename="../fontspage.cpp" line="111"/>
+        <location filename="../fontspage.cpp" line="113"/>
         <source>Are you sure you want to delete &lt;i&gt;%1&lt;/i&gt;?</source>
         <translation>Êtes-vous sûr de vouloir supprimer &lt;i&gt;%1&lt;/i&gt; ?</translation>
     </message>
@@ -400,7 +400,7 @@
     <message>
         <location filename="../mainwindow.ui" line="14"/>
         <source>Qt6 Configuration Tool</source>
-        <translation>Qt6 Outil de configuration</translation>
+        <translation>Outil de configuration pour Qt6</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="54"/>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="53"/>
         <source>Icon Theme</source>
-        <translation>Théme des icônes</translation>
+        <translation>Thème des icônes</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="54"/>
@@ -628,7 +628,7 @@
     <message>
         <location filename="../paletteeditdialog.cpp" line="97"/>
         <source>Accent</source>
-        <translation type="unfinished"></translation>
+        <translation>Accent</translation>
     </message>
     <message>
         <location filename="../paletteeditdialog.cpp" line="110"/>
@@ -806,7 +806,7 @@
     <message>
         <location filename="../troubleshootingpage.ui" line="73"/>
         <source>Do not apply any styles and color schemes for the listed applications.</source>
-        <translation>Ne pas appliquer de styles et de schémas de couleurs pour les applications listées.</translation>
+        <translation>Ne pas appliquer aucuns styles ni de jeu de couleurs pour les applications listées.</translation>
     </message>
     <message>
         <location filename="../troubleshootingpage.ui" line="82"/>

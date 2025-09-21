@@ -37,6 +37,6 @@ Keywords=settings;desktop;qt;qtsettings;qt6;
 
 
 # Translations
-Icon[ja]=設定-デスクトップ-テーマ
 Name[ja]=Qt6 の設定
 Comment[ja]=Qt6 設定ツール
+Icon[ja]=設定-デスクトップ-テーマ
