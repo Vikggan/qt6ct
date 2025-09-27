@@ -18,15 +18,17 @@ Installation:
 - Arch package
   https://archlinux.org/packages/?q=qt6ct
 
-- Source Code (qmake)
+- Building from source code using cmake (recommended)
 ```
-  qmake6 PREFIX=<your installation path>
+  cmake -DCMAKE_INSTALL_PREFIX=<your installation path>
   make
   sudo make install
 ```
-- Source Code (cmake)
+**Additional information:** to override default platform plugin path use **PLUGINDIR** cmake variable.
+
+- Building from source code using qmake
 ```
-  cmake -DCMAKE_INSTALL_PREFIX=<your installation path>
+  qmake6 PREFIX=<your installation path>
   make
   sudo make install
 ```
