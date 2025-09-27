@@ -1,6 +1,15 @@
 Changelog of the Qt6 Configuration Tool
 -----------
 
+Version 0.11
+* added Qt 6.10 support
+* disabled cmake warnings about private Qt headers
+* fixed qt6ct.desktop translations
+* applied some patches by Ilya Fedin:
+  - allow to override Qt plugin directory
+  - don't rely on label font for saving font settings
+  - always fallback to the QGenericUnixTheme
+
 Version 0.10
 * reworked color settings
 * fixed issue with app-specific palette (John Lindgren)
