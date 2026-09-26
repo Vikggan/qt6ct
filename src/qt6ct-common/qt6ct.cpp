@@ -27,6 +27,7 @@
  */
 
 #include <QDir>
+#include <QFileInfo>
 #include <QLocale>
 #include <QLatin1String>
 #include <QStandardPaths>
@@ -62,11 +63,19 @@ void Qt6CT::initConfig()
 
 QString Qt6CT::configPath()
 {
+    const QString configFileOverride = qEnvironmentVariable("QT6CT_CONFIG");
+    if(!configFileOverride.isEmpty())
+        return QFileInfo(resolvePath(configFileOverride)).absolutePath();
+
     return QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1String("/qt6ct");
 }
 
 QString Qt6CT::configFile()
 {
+    const QString configFileOverride = qEnvironmentVariable("QT6CT_CONFIG");
+    if(!configFileOverride.isEmpty())
+        return resolvePath(configFileOverride);
+
     return configPath() + QLatin1String("/qt6ct.conf");
 }
 
