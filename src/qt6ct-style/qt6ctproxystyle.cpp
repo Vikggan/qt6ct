@@ -49,7 +49,8 @@ void Qt6CTProxyStyle::reloadSettings()
 
     if(style != m_style)
     {
-        setBaseStyle(QStyleFactory::create(style));
+        // A null base style makes QProxyStyle recurse indefinitely.
+        setBaseStyle(QStyleFactory::create(style) ?: new QCommonStyle);
         m_style = style;
     }
 }

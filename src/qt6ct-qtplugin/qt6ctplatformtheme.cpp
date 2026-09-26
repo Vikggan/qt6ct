@@ -41,38 +41,69 @@
 #include <QStyleFactory>
 #include <QApplication>
 #include <QWidget>
+#if QT_CONFIG(graphicsview)
+#include <QGraphicsScene>
+#endif
+#include <private/qapplication_p.h>
 #endif
 #include <QFile>
 #include <QFileSystemWatcher>
-#include <private/qiconloader_p.h>
+#include <utility>
+#ifdef QT_QUICKCONTROLS2_LIB
+#include <QQuickStyle>
+#endif
 
 #include "qt6ct.h"
 #include "qt6ctplatformtheme.h"
 
 #include <QStringList>
 #include <qpa/qplatformthemefactory_p.h>
+#include <qpa/qwindowsysteminterface.h>
+
+#ifdef KF_ICONTHEMES_LIB
+#include <KIconEngine>
+#include <KIconLoader>
+#endif
 
 Q_LOGGING_CATEGORY(lqt6ct, "qt6ct", QtWarningMsg)
 
 //QT_QPA_PLATFORMTHEME=qt6ct
 
-Qt6CTPlatformTheme::Qt6CTPlatformTheme()
+Qt6CTPlatformTheme::Qt6CTPlatformTheme() :
+    m_generalFont(*QGenericUnixTheme::font(QPlatformTheme::SystemFont)),
+    m_fixedFont(*QGenericUnixTheme::font(QPlatformTheme::FixedFont))
 {
     Qt6CT::initConfig();
     if(QGuiApplication::desktopSettingsAware())
     {
         readSettings();
-        QMetaObject::invokeMethod(this, "applySettings", Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &Qt6CTPlatformTheme::applySettings, Qt::QueuedConnection);
+        QMetaObject::invokeMethod(this, &Qt6CTPlatformTheme::createFSWatcher, Qt::QueuedConnection);
+        // This must be set before Q_COREAPP_STARTUP_FUNCTION execution.
+        if(Qt6CT::isKColorScheme(m_schemePath))
+            qApp->setProperty("KDE_COLOR_SCHEME_PATH", m_schemePath);
 #ifdef QT_WIDGETS_LIB
-        QMetaObject::invokeMethod(this, "createFSWatcher", Qt::QueuedConnection);
+        if(hasWidgets())
+        {
+            // The configured base style may depend on interfaces not initialized yet.
+            QTimer::singleShot(0, this, [this] {
+                m_style.reset(QStyleFactory::create(QLatin1String("qt6ct-style")));
+                applySettings();
+            });
+#ifdef QT_QUICKCONTROLS2_LIB
+            // Do not override a value explicitly selected by the application.
+            if(QQuickStyle::name().isEmpty() || QQuickStyle::name() == QLatin1String("Fusion"))
+                QQuickStyle::setStyle(QLatin1String("org.kde.desktop"));
 #endif
-        QGuiApplication::setFont(m_generalFont);
+        }
+#endif
     }
     qCDebug(lqt6ct) << "using qt6ct plugin";
 #ifdef QT_WIDGETS_LIB
     if(!QStyleFactory::keys().contains("qt6ct-style"))
         qCCritical(lqt6ct) << "unable to find qt6ct proxy style";
 #endif
+    QCoreApplication::instance()->installEventFilter(this);
 }
 
 Qt6CTPlatformTheme::~Qt6CTPlatformTheme()
@@ -90,10 +121,42 @@ QPlatformDialogHelper *Qt6CTPlatformTheme::createPlatformDialogHelper(DialogType
                      QPlatformTheme::createPlatformDialogHelper(type);
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+Qt::ColorScheme Qt6CTPlatformTheme::colorScheme() const
+{
+    // Avoid QPlatformTheme::palette -> initializeSystemPalette -> Fusion palette
+    // -> colorScheme recursion.
+    if(m_isIgnored || m_inColorScheme)
+        return QGenericUnixTheme::colorScheme();
+
+    m_inColorScheme = true;
+#ifdef QT_WIDGETS_LIB
+    // Follow QApplicationPrivate::basePalette() logic.
+    QPalette effectivePalette = m_style ? m_style->standardPalette() : QPalette(Qt::gray);
+    if(const QPalette *themePalette = palette())
+        effectivePalette = themePalette->resolve(effectivePalette);
+    effectivePalette.setResolveMask(0);
+    if(m_style)
+        m_style->polish(effectivePalette);
+#else
+    // Follow QGuiApplicationPrivate::basePalette() logic.
+    const QPalette effectivePalette = palette() ? *palette() : QPalette(Qt::gray);
+#endif
+    m_inColorScheme = false;
+
+    return effectivePalette.windowText().color().lightness() > effectivePalette.window().color().lightness()
+            ? Qt::ColorScheme::Dark
+            : effectivePalette.windowText().color().lightness() < effectivePalette.window().color().lightness()
+            ? Qt::ColorScheme::Light
+            : QGenericUnixTheme::colorScheme();
+}
+#endif
+
 const QPalette *Qt6CTPlatformTheme::palette(QPlatformTheme::Palette type) const
 {
-    qDebug() << Q_FUNC_INFO << type;
-    return (m_usePalette && m_palette) ? m_palette.get() : QGenericUnixTheme::palette(type);
+    if(type == QPlatformTheme::SystemPalette && m_usePalette && m_palette)
+        return &*m_palette;
+    return QGenericUnixTheme::palette(type);
 }
 
 const QFont *Qt6CTPlatformTheme::font(QPlatformTheme::Font type) const
@@ -148,6 +211,13 @@ QIcon Qt6CTPlatformTheme::fileIcon(const QFileInfo &fileInfo, QPlatformTheme::Ic
     return QIcon::fromTheme(type.iconName());
 }
 
+#ifdef KF_ICONTHEMES_LIB
+QIconEngine *Qt6CTPlatformTheme::createIconEngine(const QString &iconName) const
+{
+    return new KIconEngine(iconName, KIconLoader::global());
+}
+#endif
+
 void Qt6CTPlatformTheme::applySettings()
 {
     if(!QGuiApplication::desktopSettingsAware() || m_isIgnored)
@@ -167,26 +237,20 @@ void Qt6CTPlatformTheme::applySettings()
         }
     }
 
-    QGuiApplication::setFont(m_generalFont); //apply font
+    if(Qt6CT::isKColorScheme(m_schemePath))
+        qApp->setProperty("KDE_COLOR_SCHEME_PATH", m_schemePath);
+    else if(m_update)
+        qApp->setProperty("KDE_COLOR_SCHEME_PATH", QVariant());
 
 #ifdef QT_WIDGETS_LIB
     if(hasWidgets())
     {
-        qApp->setFont(m_generalFont);
-
-        //Qt 5.6 or higher should be use themeHint function on application startup.
-        //So, there is no need to call this function first time.
         if(m_update)
         {
-            qApp->setWheelScrollLines(m_wheelScrollLines);
+            if(FontHash *hash = qt_app_fonts_hash(); hash && hash->size())
+                hash->clear();
             Qt6CT::reloadStyleInstanceSettings();
         }
-
-        if(!m_palette)
-            m_palette = std::make_unique<QPalette>(qApp->style()->standardPalette());
-
-        if(m_update && m_usePalette)
-            qApp->setPalette(*m_palette);
 
         if(m_userStyleSheet != m_prevStyleSheet)
         {
@@ -209,25 +273,27 @@ void Qt6CTPlatformTheme::applySettings()
 #endif
 
     if(m_update)
-        QIconLoader::instance()->updateSystemTheme(); //apply icons
+    {
+        QWindowSystemInterface::handleThemeChange();
+        QCoreApplication::postEvent(qGuiApp, new QEvent(QEvent::ApplicationFontChange));
+    }
 
 #ifdef QT_WIDGETS_LIB
     if(hasWidgets() && m_update)
     {
-        for(QWidget *w : qApp->allWidgets())
-        {
-            QEvent e(QEvent::ThemeChange);
-            QApplication::sendEvent(w, &e);
-            if(m_palette && m_usePalette)
-                w->setPalette(*m_palette);
-        }
+#if QT_CONFIG(graphicsview)
+        for(auto scene : std::as_const(QApplicationPrivate::instance()->scene_list))
+            QCoreApplication::postEvent(scene, new QEvent(QEvent::ApplicationFontChange));
+#endif
+
+        for(QWidget *w : QApplication::allWidgets())
+            QCoreApplication::postEvent(w, new QEvent(QEvent::ThemeChange));
     }
 #endif
 
     m_update = true;
 }
 
-#ifdef QT_WIDGETS_LIB
 void Qt6CTPlatformTheme::createFSWatcher()
 {
     QFileSystemWatcher *watcher = new QFileSystemWatcher(this);
@@ -246,22 +312,16 @@ void Qt6CTPlatformTheme::updateSettings()
     readSettings();
     applySettings();
 }
-#endif
 
 void Qt6CTPlatformTheme::readSettings()
 {
-    m_palette.reset();
-
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
 
     settings.beginGroup("Appearance");
-    m_style = settings.value("style", "Fusion").toString();
-    QString schemePath = settings.value("color_scheme_path").toString();
-    if(!schemePath.isEmpty() && settings.value("custom_palette", false).toBool())
-    {
-        schemePath = Qt6CT::resolvePath(schemePath); //replace environment variables
-        m_palette = std::make_unique<QPalette>(Qt6CT::loadColorScheme(schemePath, *QPlatformTheme::palette(SystemPalette)));
-    }
+    m_schemePath = !m_isIgnored && settings.value("custom_palette", false).toBool()
+            ? Qt6CT::resolvePath(settings.value("color_scheme_path").toString())
+            : QString();
+    m_palette = Qt6CT::loadColorScheme(m_schemePath);
     m_iconTheme = settings.value("icon_theme").toString();
     //load dialogs
     if(!m_update)
@@ -269,8 +329,9 @@ void Qt6CTPlatformTheme::readSettings()
         //do not mix gtk2 style and gtk3 dialogs
         QStringList keys = QPlatformThemeFactory::keys();
         QString dialogs = settings.value("standard_dialogs", "default").toString();
+        QString style = settings.value("style", "Fusion").toString();
 
-        if(m_style.endsWith("gtk2") && dialogs == QLatin1String("gtk3"))
+        if(style.endsWith("gtk2") && dialogs == QLatin1String("gtk3"))
             dialogs = QLatin1String("gtk2");
         if(keys.contains(dialogs))
             m_theme.reset(QPlatformThemeFactory::create(dialogs));
@@ -279,10 +340,10 @@ void Qt6CTPlatformTheme::readSettings()
     settings.endGroup();
 
     settings.beginGroup("Fonts");
-    m_generalFont = QGuiApplication::font();
-    m_generalFont.fromString(settings.value("general", QGuiApplication::font()).toString());
-    m_fixedFont = QGuiApplication::font();
-    m_fixedFont.fromString(settings.value("fixed", QGuiApplication::font()).toString());
+    m_generalFont = *QGenericUnixTheme::font(QPlatformTheme::SystemFont);
+    m_generalFont.fromString(settings.value("general").toString());
+    m_fixedFont = *QGenericUnixTheme::font(QPlatformTheme::FixedFont);
+    m_fixedFont.fromString(settings.value("fixed").toString());
     settings.endGroup();
 
     settings.beginGroup("Interface");
@@ -354,13 +415,14 @@ bool Qt6CTPlatformTheme::hasWidgets()
 QString Qt6CTPlatformTheme::loadStyleSheets(const QStringList &paths)
 {
     QString content;
-    for(const QString &path : qAsConst(paths))
+    for(const QString &path : std::as_const(paths))
     {
         if(!QFile::exists(path))
             continue;
 
         QFile file(path);
-        file.open(QIODevice::ReadOnly);
+        if(!file.open(QIODevice::ReadOnly))
+            continue;
         content.append(QString::fromUtf8(file.readAll()));
         if(!content.endsWith(QChar::LineFeed))
             content.append(QChar::LineFeed);
@@ -368,4 +430,16 @@ QString Qt6CTPlatformTheme::loadStyleSheets(const QStringList &paths)
     static const QRegularExpression regExp("//.*\n");
     content.replace(regExp, "\n");
     return content;
+}
+
+bool Qt6CTPlatformTheme::eventFilter(QObject *obj, QEvent *event)
+{
+    // KColorSchemeManager may clear this property while changing schemes. Reapply
+    // qt6ct's configured scheme instead of falling back to kdeglobals.
+    if(obj == qApp && event->type() == QEvent::DynamicPropertyChange &&
+            static_cast<QDynamicPropertyChangeEvent *>(event)->propertyName() == "KDE_COLOR_SCHEME_PATH" &&
+            qApp->property("KDE_COLOR_SCHEME_PATH").toString().isEmpty() &&
+            Qt6CT::isKColorScheme(m_schemePath))
+        applySettings();
+    return QObject::eventFilter(obj, event);
 }

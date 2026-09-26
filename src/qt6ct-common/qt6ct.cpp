@@ -34,6 +34,11 @@
 #include <QFile>
 #include <QSettings>
 #include <QtDebug>
+#include <utility>
+#if defined KF_CONFIGCORE_LIB && defined KF_COLORSCHEME_LIB
+#include <KSharedConfig>
+#include <KColorScheme>
+#endif
 #include "qt6ct.h"
 
 #ifndef QT6CT_DATADIR
@@ -116,6 +121,9 @@ QStringList Qt6CT::sharedColorSchemePaths()
     for(const QString &p : QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation))
     {
         paths << (p + QLatin1String("/qt6ct/colors"));
+#if defined KF_CONFIGCORE_LIB && defined KF_COLORSCHEME_LIB
+        paths << (p + QLatin1String("/color-schemes"));
+#endif
     }
     paths << QLatin1String(QT6CT_DATADIR"/qt6ct/colors");
     paths.removeDuplicates();
@@ -124,6 +132,9 @@ QStringList Qt6CT::sharedColorSchemePaths()
 
 QString Qt6CT::resolvePath(const QString &path)
 {
+    if(path.isEmpty())
+        return path;
+
     QString tmp = path;
     tmp.replace("~", QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
     if(!tmp.contains("$"))
@@ -143,9 +154,21 @@ QString Qt6CT::resolvePath(const QString &path)
     return tmp;
 }
 
-QPalette Qt6CT::loadColorScheme(const QString &filePath, const QPalette &fallback)
+bool Qt6CT::isKColorScheme(const QString &filePath)
 {
-    QPalette customPalette;
+    return filePath.toLower().endsWith(QLatin1String(".colors"));
+}
+
+std::optional<QPalette> Qt6CT::loadColorScheme(const QString &filePath)
+{
+    if(filePath.isEmpty())
+        return std::nullopt;
+
+#if defined KF_CONFIGCORE_LIB && defined KF_COLORSCHEME_LIB
+    if(isKColorScheme(filePath))
+        return KColorScheme::createApplicationPalette(KSharedConfig::openConfig(filePath));
+#endif
+
     QSettings settings(filePath, QSettings::IniFormat);
     settings.beginGroup("ColorScheme");
     QStringList activeColors = settings.value("active_colors").toStringList();
@@ -164,23 +187,19 @@ QPalette Qt6CT::loadColorScheme(const QString &filePath, const QPalette &fallbac
 #endif
 
 
-    if(activeColors.count() >= QPalette::NColorRoles &&
-            inactiveColors.count() >= QPalette::NColorRoles &&
-            disabledColors.count() >= QPalette::NColorRoles)
-    {
-        for (int i = 0; i < QPalette::NColorRoles; i++)
-        {
-            QPalette::ColorRole role = QPalette::ColorRole(i);
-            customPalette.setColor(QPalette::Active, role, QColor(activeColors.at(i)));
-            customPalette.setColor(QPalette::Inactive, role, QColor(inactiveColors.at(i)));
-            customPalette.setColor(QPalette::Disabled, role, QColor(disabledColors.at(i)));
-        }
-    }
-    else
-    {
-        customPalette = fallback; //load fallback palette
-    }
+    if(activeColors.count() < QPalette::NColorRoles ||
+            inactiveColors.count() < QPalette::NColorRoles ||
+            disabledColors.count() < QPalette::NColorRoles)
+        return std::nullopt;
 
+    QPalette customPalette;
+    for (int i = 0; i < QPalette::NColorRoles; i++)
+    {
+        QPalette::ColorRole role = QPalette::ColorRole(i);
+        customPalette.setColor(QPalette::Active, role, QColor(activeColors.at(i)));
+        customPalette.setColor(QPalette::Inactive, role, QColor(inactiveColors.at(i)));
+        customPalette.setColor(QPalette::Disabled, role, QColor(disabledColors.at(i)));
+    }
     return customPalette;
 }
 
@@ -196,6 +215,6 @@ void Qt6CT::unregisterStyleInstance(Qt6CT::StyleInstance *instance)
 
 void Qt6CT::reloadStyleInstanceSettings()
 {
-    for(auto instance : qAsConst(styleInstances))
+    for(auto instance : std::as_const(styleInstances))
         instance->reloadSettings();
 }

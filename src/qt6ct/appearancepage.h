@@ -49,6 +49,10 @@ public:
 
     void writeSettings(QSettings *settings) override;
 
+#ifdef KF_CONFIGCORE_LIB
+    void writeSettings(KSharedConfigPtr config) override;
+#endif
+
 private slots:
     void on_styleComboBox_textActivated(const QString &text);
     void on_colorSchemeComboBox_activated(int);
@@ -72,7 +76,7 @@ private:
     QStyle *m_selectedStyle = nullptr;
     QPalette m_customPalette;
     QWidget *m_previewWidget;
-    QAction *m_changeColorSchemeAction, *m_renameColorSchemeAction, *m_removeColorSchemeAction;
+    QAction *m_changeColorSchemeAction, *m_copyColorSchemeAction, *m_renameColorSchemeAction, *m_removeColorSchemeAction;
     Ui::PreviewForm *m_previewUi;
 };
 

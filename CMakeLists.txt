@@ -21,10 +21,20 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
+set(QT_NO_PRIVATE_MODULE_WARNING ON)
 
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060000 -DUSE_WIDGETS)
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x060200 -DQT_DEPRECATED_WARNINGS -DQT_MESSAGELOGCONTEXT)
+add_compile_options(-Wall -Wextra)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-find_package(Qt6 REQUIRED COMPONENTS BuildInternals Core Widgets OPTIONAL_COMPONENTS LinguistTools)
+find_package(Qt6 6.2 CONFIG REQUIRED COMPONENTS BuildInternals Core OPTIONAL_COMPONENTS Widgets QuickControls2 LinguistTools)
+if(Qt6_VERSION VERSION_GREATER_EQUAL 6.10)
+    find_package(Qt6 6.10 CONFIG REQUIRED COMPONENTS GuiPrivate OPTIONAL_COMPONENTS WidgetsPrivate)
+endif()
+
+find_package(KF6Config)
+find_package(KF6ColorScheme)
+find_package(KF6IconThemes)
 
 get_target_property(QT_QTPATHS_EXECUTABLE Qt6::qtpaths IMPORTED_LOCATION)
 
@@ -67,10 +77,12 @@ endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/qt6ct-common)
 
 add_link_options(-Wl,--no-undefined)
-add_subdirectory(src/qt6ct)
 add_subdirectory(src/qt6ct-common)
 add_subdirectory(src/qt6ct-qtplugin)
-add_subdirectory(src/qt6ct-style)
+if(Qt6Widgets_FOUND)
+    add_subdirectory(src/qt6ct-style)
+    add_subdirectory(src/qt6ct)
+endif()
 
 install(DIRECTORY qss DESTINATION ${CMAKE_INSTALL_DATADIR}/qt6ct)
 install(DIRECTORY colors DESTINATION ${CMAKE_INSTALL_DATADIR}/qt6ct)

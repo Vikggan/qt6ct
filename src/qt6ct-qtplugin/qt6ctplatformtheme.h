@@ -30,7 +30,11 @@
 #define QT6CTPLATFORMTHEME_H
 
 #include <qpa/qplatformtheme.h>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 11, 0)
+#include <private/qgenericunixtheme_p.h>
+#else
 #include <private/qgenericunixthemes_p.h>
+#endif
 #include <QObject>
 #include <QFont>
 #include <QPalette>
@@ -38,6 +42,9 @@
 #include <QIcon>
 #include <QFileInfo>
 #include <memory>
+#include <optional>
+
+class QStyle;
 
 Q_DECLARE_LOGGING_CATEGORY(lqt6ct)
 
@@ -54,6 +61,9 @@ public:
     //virtual void showPlatformMenuBar() {}
     virtual bool usePlatformNativeDialog(DialogType type) const override;
     virtual QPlatformDialogHelper *createPlatformDialogHelper(DialogType type) const override;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+    virtual Qt::ColorScheme colorScheme() const override;
+#endif
     virtual const QPalette *palette(Palette type = SystemPalette) const override;
     virtual const QFont *font(Font type = SystemFont) const override;
     virtual QVariant themeHint(ThemeHint hint) const override;
@@ -62,16 +72,19 @@ public:
     //virtual QPixmap fileIconPixmap(const QFileInfo &fileInfo, const QSizeF &size,
     //                               QPlatformTheme::IconOptions iconOptions = 0) const;
 
-    //virtual QIconEngine *createIconEngine(const QString &iconName) const;
+#ifdef KF_ICONTHEMES_LIB
+    virtual QIconEngine *createIconEngine(const QString &iconName) const override;
+#endif
     //virtual QList<QKeySequence> keyBindings(QKeySequence::StandardKey key) const;
     //virtual QString standardButtonText(int button) const;
 
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
 private slots:
     void applySettings();
-#ifdef QT_WIDGETS_LIB
     void createFSWatcher();
     void updateSettings();
-#endif
 
 private:
     void readSettings();
@@ -79,8 +92,8 @@ private:
     bool hasWidgets();
 #endif
     QString loadStyleSheets(const QStringList &paths);
-    QString m_style, m_iconTheme, m_userStyleSheet, m_prevStyleSheet;
-    std::unique_ptr<QPalette> m_palette;
+    QString m_schemePath, m_iconTheme, m_userStyleSheet, m_prevStyleSheet;
+    std::optional<QPalette> m_palette;
     QFont m_generalFont, m_fixedFont;
     int m_doubleClickInterval;
     int m_cursorFlashTime;
@@ -93,7 +106,11 @@ private:
     int m_wheelScrollLines = 3;
     bool m_showShortcutsInContextMenus = false;
     bool m_isIgnored = false;
+    mutable bool m_inColorScheme = false;
     std::unique_ptr<QPlatformTheme> m_theme;
+#ifdef QT_WIDGETS_LIB
+    std::unique_ptr<QStyle> m_style;
+#endif
 };
 
 Q_DECLARE_LOGGING_CATEGORY(lqt6ct)

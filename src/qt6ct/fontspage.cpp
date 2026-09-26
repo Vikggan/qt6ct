@@ -29,6 +29,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QApplication>
+#include <QFontDatabase>
 #include <QFontDialog>
 #include <QDir>
 #include <QFile>
@@ -70,11 +71,18 @@ void FontsPage::onFontChangeRequested(QWidget *widget)
 {
     bool ok = false;
     QFont font = QFontDialog::getFont (&ok, widget->font(), this);
-    if(ok)
-    {
-        widget->setFont(font);
-        qobject_cast<QLabel*>(widget)->setText(font.family () + " " + QString::number(font.pointSize ()));
-    }
+    if(!ok)
+        return;
+
+    if(font.weight() == QFont::Normal &&
+            (font.styleName() == QLatin1String("Regular") ||
+             font.styleName() == QLatin1String("Normal") ||
+             font.styleName() == QLatin1String("Book") ||
+             font.styleName() == QLatin1String("Roman")))
+        font.setStyleName(QString());
+
+    widget->setFont(font);
+    qobject_cast<QLabel*>(widget)->setText(font.family () + " " + QString::number(font.pointSize ()));
 }
 
 void FontsPage::readSettings()
@@ -88,8 +96,9 @@ void FontsPage::readSettings()
 
 void FontsPage::loadFont(QSettings *settings, QLabel *label, const QString &key)
 {
-    QFont font = QApplication::font();
-    font.fromString(settings->value(key, QApplication::font().toString()).toString());
+    QFont font = settings->value(key, key == QLatin1String("fixed")
+            ? QFontDatabase::systemFont(QFontDatabase::FixedFont)
+            : QFontDatabase::systemFont(QFontDatabase::GeneralFont)).value<QFont>();
     label->setText(font.family() + " " + QString::number(font.pointSize()));
     label->setFont(font);
 }

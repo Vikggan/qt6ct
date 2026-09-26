@@ -42,6 +42,7 @@
 #include <QString>
 #include <QStringList>
 #include <QPalette>
+#include <optional>
 
 #ifdef QT6CT_LIBRARY
 #define QT6CT_EXPORT Q_DECL_EXPORT
@@ -67,7 +68,8 @@ public:
     static QString userColorSchemePath();
     static QStringList sharedColorSchemePaths();
     static QString resolvePath(const QString &path);
-    static QPalette loadColorScheme(const QString &filePath, const QPalette &fallback);
+    static bool isKColorScheme(const QString &filePath);
+    static std::optional<QPalette> loadColorScheme(const QString &filePath);
 
     static void registerStyleInstance(StyleInstance *instance);
     static void unregisterStyleInstance(StyleInstance *instance);
