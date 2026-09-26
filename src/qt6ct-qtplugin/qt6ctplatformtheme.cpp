@@ -366,9 +366,13 @@ void Qt6CTPlatformTheme::readSettings()
 
     settings.beginGroup("Fonts");
     m_generalFont = *QGenericUnixTheme::font(QPlatformTheme::SystemFont);
-    m_generalFont.fromString(settings.value("general").toString());
+    const QString generalFont = settings.value("general").toString();
+    if(!generalFont.isEmpty())
+        m_generalFont.fromString(generalFont);
     m_fixedFont = *QGenericUnixTheme::font(QPlatformTheme::FixedFont);
-    m_fixedFont.fromString(settings.value("fixed").toString());
+    const QString fixedFont = settings.value("fixed").toString();
+    if(!fixedFont.isEmpty())
+        m_fixedFont.fromString(fixedFont);
     settings.endGroup();
 
     settings.beginGroup("Interface");
