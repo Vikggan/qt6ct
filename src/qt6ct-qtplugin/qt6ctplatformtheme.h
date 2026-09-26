@@ -88,11 +88,12 @@ private slots:
 
 private:
     void readSettings();
+    QPlatformTheme *dialogTheme() const;
 #ifdef QT_WIDGETS_LIB
     bool hasWidgets();
 #endif
     QString loadStyleSheets(const QStringList &paths);
-    QString m_schemePath, m_iconTheme, m_userStyleSheet, m_prevStyleSheet;
+    QString m_schemePath, m_iconTheme, m_dialogTheme, m_userStyleSheet, m_prevStyleSheet;
     std::optional<QPalette> m_palette;
     QFont m_generalFont, m_fixedFont;
     int m_doubleClickInterval;
@@ -107,7 +108,7 @@ private:
     bool m_showShortcutsInContextMenus = false;
     bool m_isIgnored = false;
     mutable bool m_inColorScheme = false;
-    std::unique_ptr<QPlatformTheme> m_theme;
+    mutable std::unique_ptr<QPlatformTheme> m_theme;
 #ifdef QT_WIDGETS_LIB
     std::unique_ptr<QStyle> m_style;
 #endif

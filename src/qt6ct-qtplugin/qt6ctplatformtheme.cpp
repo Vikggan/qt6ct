@@ -113,14 +113,42 @@ Qt6CTPlatformTheme::~Qt6CTPlatformTheme()
 
 bool Qt6CTPlatformTheme::usePlatformNativeDialog(DialogType type) const
 {
-    return m_theme ? m_theme->usePlatformNativeDialog(type) :
+    QPlatformTheme *theme = dialogTheme();
+    return theme ? theme->usePlatformNativeDialog(type) :
                      QPlatformTheme::usePlatformNativeDialog(type);
 }
 
 QPlatformDialogHelper *Qt6CTPlatformTheme::createPlatformDialogHelper(DialogType type) const
 {
-    return m_theme ? m_theme->createPlatformDialogHelper(type) :
+    QPlatformTheme *theme = dialogTheme();
+    return theme ? theme->createPlatformDialogHelper(type) :
                      QPlatformTheme::createPlatformDialogHelper(type);
+}
+
+QPlatformTheme *Qt6CTPlatformTheme::dialogTheme() const
+{
+    if(m_isIgnored || m_dialogTheme.isEmpty())
+        return nullptr;
+
+    if(!m_theme)
+    {
+#ifdef KF_ICONTHEMES_LIB
+        // A nested KDE platform theme can initialize KIconLoader before
+        // qt6ct becomes active. Temporarily expose qt6ct's theme so an
+        // application fallback such as Breeze is not cached as current.
+        const bool setTemporaryIconTheme = !m_iconTheme.isEmpty() &&
+                !QIconLoader::instance()->hasUserTheme();
+        if(setTemporaryIconTheme)
+            QIcon::setThemeName(m_iconTheme);
+#endif
+        m_theme.reset(QPlatformThemeFactory::create(m_dialogTheme));
+#ifdef KF_ICONTHEMES_LIB
+        if(setTemporaryIconTheme)
+            QIcon::setThemeName(QString());
+#endif
+    }
+
+    return m_theme.get();
 }
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
@@ -344,22 +372,7 @@ void Qt6CTPlatformTheme::readSettings()
         if(style.endsWith("gtk2") && dialogs == QLatin1String("gtk3"))
             dialogs = QLatin1String("gtk2");
         if(keys.contains(dialogs))
-        {
-#ifdef KF_ICONTHEMES_LIB
-            // A nested KDE platform theme can initialize KIconLoader before
-            // qt6ct becomes active. Temporarily expose qt6ct's theme so an
-            // application fallback such as Breeze is not cached as current.
-            const bool setTemporaryIconTheme = !m_iconTheme.isEmpty() &&
-                    !QIconLoader::instance()->hasUserTheme();
-            if(setTemporaryIconTheme)
-                QIcon::setThemeName(m_iconTheme);
-#endif
-            m_theme.reset(QPlatformThemeFactory::create(dialogs));
-#ifdef KF_ICONTHEMES_LIB
-            if(setTemporaryIconTheme)
-                QIcon::setThemeName(QString());
-#endif
-        }
+            m_dialogTheme = dialogs;
     }
 
     settings.endGroup();
