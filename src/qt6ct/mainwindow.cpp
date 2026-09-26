@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -58,11 +58,11 @@ MainWindow::MainWindow(QWidget *parent) :
     m_ui->tabWidget->addTab(new TroubleshootingPage(this), tr("Troubleshooting"));
 
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    restoreGeometry(settings.value("SettingsWindow/geometry").toByteArray());
+    restoreGeometry(settings.value("SettingsWindow/geometry"_L1).toByteArray());
 
-    setWindowIcon(QIcon::fromTheme("preferences-desktop-theme"));
+    setWindowIcon(QIcon::fromTheme(u"preferences-desktop-theme"_s));
 
-    m_ui->versionLabel->setText(tr("Version: %1").arg(QT6CT_VERSION_STR));
+    m_ui->versionLabel->setText(tr("Version: %1").arg(QStringLiteral(QT6CT_VERSION_STR)));
     m_ui->warningIconLabel->setPixmap(qApp->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(16, 16));
 
     checkConfiguration();
@@ -82,7 +82,7 @@ void MainWindow::showEvent(QShowEvent *)
 void MainWindow::closeEvent(QCloseEvent *)
 {
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    settings.setValue("SettingsWindow/geometry", saveGeometry());
+    settings.setValue("SettingsWindow/geometry"_L1, saveGeometry());
 }
 
 void MainWindow::on_buttonBox_clicked(QAbstractButton *button)
@@ -116,32 +116,32 @@ void MainWindow::on_buttonBox_clicked(QAbstractButton *button)
 
 void MainWindow::on_infoButton_clicked()
 {
-    QMessageBox::warning(this, tr("Warning"), m_errors.join("<br><br>"));
+    QMessageBox::warning(this, tr("Warning"), m_errors.join(u"<br><br>"_s));
 }
 
 void MainWindow::checkConfiguration()
 {
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 
-    if(env.contains("QT_STYLE_OVERRIDE"))
+    if(env.contains(u"QT_STYLE_OVERRIDE"_s))
     {
         m_errors << tr("Please remove the <b>QT_STYLE_OVERRIDE</b> environment variable (current value: <b>%1</b>).")
-                    .arg(env.value("QT_STYLE_OVERRIDE"));
+                    .arg(env.value(u"QT_STYLE_OVERRIDE"_s));
     }
 
-    if(!env.contains("QT_QPA_PLATFORMTHEME"))
+    if(!env.contains(u"QT_QPA_PLATFORMTHEME"_s))
     {
         m_errors << tr("The <b>QT_QPA_PLATFORMTHEME</b> environment variable is not set (required values: <b>qt6ct</b> or <b>qt5ct</b>).");
     }
-    else if(env.value("QT_QPA_PLATFORMTHEME") != QStringLiteral("qt6ct") &&
-            env.value("QT_QPA_PLATFORMTHEME") != QStringLiteral("qt5ct"))
+    else if(env.value(u"QT_QPA_PLATFORMTHEME"_s) != QLatin1String("qt6ct") &&
+            env.value(u"QT_QPA_PLATFORMTHEME"_s) != QLatin1String("qt5ct"))
     {
         m_errors << tr("The <b>QT_QPA_PLATFORMTHEME</b> environment variable is not set correctly "
                        "(current value: <b>%1</b>, required values: <b>qt6ct</b> or <b>qt5ct</b>).")
-                    .arg(env.value("QT_QPA_PLATFORMTHEME"));
+                    .arg(env.value(u"QT_QPA_PLATFORMTHEME"_s));
     }
 
-    if(!QStyleFactory::keys().contains("qt6ct-style"))
+    if(!QStyleFactory::keys().contains(u"qt6ct-style"_s))
     {
         m_errors << tr("Unable to find <b>libqt6ct-style.so</b>");
     }
@@ -149,6 +149,7 @@ void MainWindow::checkConfiguration()
     QVersionNumber v = QLibraryInfo::version();
     if(v.majorVersion() != QT_VERSION_MAJOR || v.minorVersion() != QT_VERSION_MINOR)
     {
-        m_errors << tr("The <b>%1</b> plugin is compiled against incompatible Qt version (%2).").arg("libqt6ct.so", QT_VERSION_STR);
+        m_errors << tr("The <b>%1</b> plugin is compiled against incompatible Qt version (%2).")
+                    .arg(QStringLiteral("libqt6ct.so"), QStringLiteral(QT_VERSION_STR));
     }
 }

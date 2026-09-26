@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -39,13 +39,13 @@ Qt6CTProxyStyle::Qt6CTProxyStyle()
 void Qt6CTProxyStyle::reloadSettings()
 {
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    m_dialogButtonsHaveIcons = settings.value("Interface/dialog_buttons_have_icons", Qt::PartiallyChecked).toInt();
-    m_activateItemOnSingleClick = settings.value("Interface/activate_item_on_single_click", Qt::PartiallyChecked).toInt();
-    m_underlineShortcut = settings.value("Interface/underline_shortcut", Qt::PartiallyChecked).toInt();
+    m_dialogButtonsHaveIcons = settings.value("Interface/dialog_buttons_have_icons"_L1, Qt::PartiallyChecked).toInt();
+    m_activateItemOnSingleClick = settings.value("Interface/activate_item_on_single_click"_L1, Qt::PartiallyChecked).toInt();
+    m_underlineShortcut = settings.value("Interface/underline_shortcut"_L1, Qt::PartiallyChecked).toInt();
 
-    QString style = settings.value("Appearance/style", "fusion").toString().toLower();
-    if(style == "qt6ct-style" || !QStyleFactory::keys().contains(style, Qt::CaseInsensitive))
-        style = "fusion";
+    QString style = settings.value("Appearance/style"_L1, u"fusion"_s).toString().toLower();
+    if(style == "qt6ct-style"_L1 || !QStyleFactory::keys().contains(style, Qt::CaseInsensitive))
+        style = u"fusion"_s;
 
     if(style != m_style)
     {

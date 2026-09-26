@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -115,14 +115,14 @@ bool Qt6CTPlatformTheme::usePlatformNativeDialog(DialogType type) const
 {
     QPlatformTheme *theme = dialogTheme();
     return theme ? theme->usePlatformNativeDialog(type) :
-                     QPlatformTheme::usePlatformNativeDialog(type);
+                     QGenericUnixTheme::usePlatformNativeDialog(type);
 }
 
 QPlatformDialogHelper *Qt6CTPlatformTheme::createPlatformDialogHelper(DialogType type) const
 {
     QPlatformTheme *theme = dialogTheme();
     return theme ? theme->createPlatformDialogHelper(type) :
-                     QPlatformTheme::createPlatformDialogHelper(type);
+                     QGenericUnixTheme::createPlatformDialogHelper(type);
 }
 
 QPlatformTheme *Qt6CTPlatformTheme::dialogTheme() const
@@ -423,6 +423,7 @@ void Qt6CTPlatformTheme::readSettings()
         if(effectList.contains("AnimateToolBox"))
             m_uiEffects |= QPlatformTheme::AnimateToolBoxUiEffect;
     }
+    m_uiEffects |= QPlatformTheme::HoverEffect;
 
     //load style sheets
 #ifdef QT_WIDGETS_LIB

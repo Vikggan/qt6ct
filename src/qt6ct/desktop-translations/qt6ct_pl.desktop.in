@@ -37,6 +37,6 @@ Keywords=settings;desktop;qt;qtsettings;qt6;
 
 
 # Translations
-Icon[pl]=preferences-desktop-theme
 Name[pl]=Ustawienia Qt6
 Comment[pl]=Narzędzie konfiguracji Qt6
+Icon[pl]=preferences-desktop-theme

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -47,20 +47,20 @@ TroubleshootingPage::~TroubleshootingPage()
 
 void TroubleshootingPage::writeSettings(QSettings *settings)
 {
-    settings->beginGroup("Troubleshooting");
+    settings->beginGroup("Troubleshooting"_L1);
 
     QStringList ignoredApps;
     for(int i = 0; i < m_ui->ignoredAppsListWidget->count(); ++i)
         ignoredApps << m_ui->ignoredAppsListWidget->item(i)->text();
 
-    settings->setValue("ignored_applications", ignoredApps);
-    settings->setValue("force_raster_widgets", m_ui->forceRasterCheckBox->checkState());
+    settings->setValue("ignored_applications"_L1, ignoredApps);
+    settings->setValue("force_raster_widgets"_L1, m_ui->forceRasterCheckBox->checkState());
     settings->endGroup();
 }
 
 void TroubleshootingPage::on_addAppButton_clicked()
 {
-    QString path = QFileDialog::getOpenFileName(this, tr("Select Application"), "/usr/bin", tr("Executable files (*)"));
+    QString path = QFileDialog::getOpenFileName(this, tr("Select Application"), u"/usr/bin"_s, tr("Executable files (*)"));
     if(!path.isEmpty())
         m_ui->ignoredAppsListWidget->addItem(path);
 }
@@ -74,8 +74,8 @@ void TroubleshootingPage::readSettings()
 {
     m_ui->ignoredAppsListWidget->clear();
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    settings.beginGroup("Troubleshooting");
-    m_ui->ignoredAppsListWidget->addItems(settings.value("ignored_applications").toStringList());
-    m_ui->forceRasterCheckBox->setCheckState(Qt::CheckState(settings.value("force_raster_widgets", Qt::PartiallyChecked).toInt()));
+    settings.beginGroup("Troubleshooting"_L1);
+    m_ui->ignoredAppsListWidget->addItems(settings.value("ignored_applications"_L1).toStringList());
+    m_ui->forceRasterCheckBox->setCheckState(Qt::CheckState(settings.value("force_raster_widgets"_L1, Qt::PartiallyChecked).toInt()));
     settings.endGroup();
 }

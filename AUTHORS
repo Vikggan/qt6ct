@@ -1,6 +1,6 @@
 Developers:
 
-  Ilya Kotov <forkorov02@ya.ru>, <trialuser02@gmail.com>, <iokotov@astralinux.ru>
+  Ilya Kotov <forkorov02@ya.ru>, <trialuser02@gmail.com>
 
 Translators:
 
@@ -44,3 +44,4 @@ Patches and improvements:
   Wayland fixes - Chris Rendle-Short
   Compatibility with custom stylesheets - John Lindgren
   CMake support impovements - Jonas Kvinge
+  Bug fixes and CMake support impovements - Ilya Fedin

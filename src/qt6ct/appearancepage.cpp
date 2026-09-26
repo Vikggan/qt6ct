@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -35,10 +35,12 @@
 #include <QMenu>
 #include <QIcon>
 #include <QStringList>
-#ifdef KF_CONFIGCORE_LIB
-#include <KConfigGroup>
-#endif
 #include <qpa/qplatformthemefactory_p.h>
+#include <qpa/qplatformtheme.h>
+#if defined KF_CONFIGCORE_LIB && defined KF_COLORSCHEME_LIB
+#include <KConfigGroup>
+#include <KSharedConfig>
+#endif
 #include "qt6ct.h"
 #include "appearancepage.h"
 #include "paletteeditdialog.h"
@@ -51,15 +53,13 @@ AppearancePage::AppearancePage(QWidget *parent) :
 {
     m_ui->setupUi(this);
     QStringList keys = QStyleFactory::keys();
-    keys.removeAll("qt6ct-style"); //hide qt6ct proxy style
-    keys.removeAll("qt5ct-style"); //hide qt5ct proxy style
-    keys.removeAll("qt5gtk2"); //hide qt5gtk2 alias
-    keys.removeAll("gtk2"); //hide gtk2 alias
+    keys.removeAll(u"qt6ct-style"_s); //hide qt6ct proxy style
+    keys.removeAll(u"qt5ct-style"_s); //hide qt5ct proxy style
+    keys.removeAll(u"qt5gtk2"_s); //hide qt5gtk2 alias
+    keys.removeAll(u"gtk2"_s); //hide gtk2 alias
     m_ui->styleComboBox->addItems(keys);
 
-    connect(m_ui->paletteComboBox, SIGNAL(activated(int)), SLOT(updatePalette()));
-    connect(m_ui->customPaletteButton, SIGNAL(clicked()), SLOT(updatePalette()));
-    connect(m_ui->defaultPaletteButton, SIGNAL(clicked()), SLOT(updatePalette()));
+    connect(m_ui->paletteComboBox, &QComboBox::activated, this, &AppearancePage::updatePalette);
 
     m_previewWidget = new QWidget(this);
     m_previewUi = new Ui::PreviewForm();
@@ -72,28 +72,28 @@ AppearancePage::AppearancePage(QWidget *parent) :
     w->move(10, 10);
 
     QMenu *menu = new QMenu(this);
-    menu->addAction(QIcon::fromTheme("document-new"), tr("Create"), this, SLOT(createColorScheme()));
-    m_changeColorSchemeAction = menu->addAction(QIcon::fromTheme("accessories-text-editor"), tr("Edit"), this, SLOT(changeColorScheme()));
-    m_copyColorSchemeAction = menu->addAction(QIcon::fromTheme("edit-copy"), tr("Create a Copy"), this, SLOT(copyColorScheme()));
-    m_renameColorSchemeAction = menu->addAction(tr("Rename"), this, SLOT(renameColorScheme()));
+    menu->addAction(QIcon::fromTheme(u"document-new"_s), tr("Create"), this, qOverload<>(&AppearancePage::createColorScheme));
+    m_changeColorSchemeAction = menu->addAction(QIcon::fromTheme(u"accessories-text-editor"_s), tr("Edit"), this, &AppearancePage::changeColorScheme);
+    m_copyColorSchemeAction = menu->addAction(QIcon::fromTheme(u"edit-copy"_s), tr("Create a Copy"), this, &AppearancePage::copyColorScheme);
+    m_renameColorSchemeAction = menu->addAction(tr("Rename"), this, &AppearancePage::renameColorScheme);
     menu->addSeparator();
-    m_removeColorSchemeAction = menu->addAction(QIcon::fromTheme("edit-delete"), tr("Remove"), this, SLOT(removeColorScheme()));
+    m_removeColorSchemeAction = menu->addAction(QIcon::fromTheme(u"edit-delete"_s), tr("Remove"), this, &AppearancePage::removeColorScheme);
     m_ui->colorSchemeButton->setMenu(menu);
 
-    m_changeColorSchemeAction->setIcon(QIcon::fromTheme("accessories-text-editor"));
-    m_removeColorSchemeAction->setIcon(QIcon::fromTheme("list-remove"));
-    connect(menu, SIGNAL(aboutToShow()), SLOT(updateActions()));
+    m_changeColorSchemeAction->setIcon(QIcon::fromTheme(u"accessories-text-editor"_s));
+    m_removeColorSchemeAction->setIcon(QIcon::fromTheme(u"list-remove"_s));
+    connect(menu, &QMenu::aboutToShow, this, &AppearancePage::updateActions);
 
     keys = QPlatformThemeFactory::keys();
-    m_ui->dialogComboBox->addItem(tr("Default"), "default");
-    if(keys.contains("gtk2") || keys.contains("qt6gtk2"))
-        m_ui->dialogComboBox->addItem("GTK2", "gtk2");
-    else if(keys.contains("gtk3") || keys.contains("qt6gtk3"))
-        m_ui->dialogComboBox->addItem("GTK3", "gtk3");
-    if(keys.contains("kde"))
-        m_ui->dialogComboBox->addItem("KDE", "kde");
-    if (keys.contains("xdgdesktopportal"))
-        m_ui->dialogComboBox->addItem("XDG Desktop Portal", "xdgdesktopportal");
+    m_ui->dialogComboBox->addItem(tr("Default"), u"default"_s);
+    if(keys.contains(u"gtk2"_s) || keys.contains(u"qt6gtk2"_s))
+        m_ui->dialogComboBox->addItem(u"GTK2"_s, u"gtk2"_s);
+    else if(keys.contains(u"gtk3"_s) || keys.contains(u"qt6gtk3"_s))
+        m_ui->dialogComboBox->addItem(u"GTK3"_s, u"gtk3"_s);
+    if(keys.contains(u"kde"_s))
+        m_ui->dialogComboBox->addItem(u"KDE"_s, u"kde"_s);
+    if(keys.contains(u"xdgdesktopportal"_s))
+        m_ui->dialogComboBox->addItem(u"XDG Desktop Portal"_s, u"xdgdesktopportal"_s);
 
     readSettings();
 }
@@ -107,11 +107,26 @@ AppearancePage::~AppearancePage()
 
 void AppearancePage::writeSettings(QSettings *settings)
 {
-    settings->beginGroup("Appearance");
-    settings->setValue("style", m_ui->styleComboBox->currentText());
-    settings->setValue("custom_palette", m_ui->customPaletteButton->isChecked());
-    settings->setValue("color_scheme_path", m_ui->colorSchemeComboBox->currentData().toString());
-    settings->setValue("standard_dialogs", m_ui->dialogComboBox->currentData().toString());
+    settings->beginGroup("Appearance"_L1);
+    settings->setValue("style"_L1, m_ui->styleComboBox->currentText());
+
+    if(m_ui->colorSchemeComboBox->currentData().toString() == QLatin1String("system"))
+    {
+        settings->setValue("custom_palette"_L1, false);
+    }
+    else if(m_ui->colorSchemeComboBox->currentData().toString() == QLatin1String("style"))
+    {
+        settings->setValue("custom_palette"_L1, true);
+        settings->setValue("color_scheme_path"_L1, Qt6CT::styleColorSchemeFile());
+        createColorScheme(Qt6CT::styleColorSchemeFile(), m_previewWidget->palette());
+    }
+    else
+    {
+        settings->setValue("custom_palette"_L1, true);
+        settings->setValue("color_scheme_path"_L1, m_ui->colorSchemeComboBox->currentData().toString());
+    }
+
+    settings->setValue("standard_dialogs"_L1, m_ui->dialogComboBox->currentData().toString());
     settings->endGroup();
 }
 
@@ -134,12 +149,29 @@ void AppearancePage::on_styleComboBox_textActivated(const QString &text)
     delete m_selectedStyle;
     m_selectedStyle = style;
 
+    if(m_ui->colorSchemeComboBox->currentData().toString() == QLatin1String("style"))
+        m_customPalette = m_selectedStyle->standardPalette();
+
     updatePalette();
 }
 
 void AppearancePage::on_colorSchemeComboBox_activated(int)
 {
-    m_customPalette = Qt6CT::loadColorScheme(m_ui->colorSchemeComboBox->currentData().toString()).value_or(palette());
+    QString data = m_ui->colorSchemeComboBox->currentData().toString();
+
+    if(data == QLatin1String("system"))
+    {
+        QPlatformTheme t;
+        m_customPalette = *t.palette();
+    }
+    else if(data == QLatin1String("style"))
+    {
+        m_customPalette = m_selectedStyle->standardPalette();
+    }
+    else
+    {
+        m_customPalette = Qt6CT::loadColorScheme(data).value_or(palette());
+    }
     updatePalette();
 }
 
@@ -149,20 +181,20 @@ void AppearancePage::createColorScheme()
     if(name.isEmpty())
         return;
 
-    if(!name.endsWith(".conf", Qt::CaseInsensitive))
-        name.append(".conf");
+    if(!name.endsWith(u".conf"_s, Qt::CaseInsensitive))
+        name.append(u".conf"_s);
 
-    if(m_ui->colorSchemeComboBox->findText(name.section('.',0,0)) != -1)
+    if(m_ui->colorSchemeComboBox->findText(name.section(QLatin1Char('.'),0,0)) != -1)
     {
         QMessageBox::warning(this, tr("Error"), tr("The color scheme \"%1\" already exists")
-                             .arg(name.section('.',0,0)));
+                             .arg(name.section(QLatin1Char('.'),0,0)));
         return;
     }
 
-    QString schemePath = Qt6CT::userColorSchemePath() + QLatin1String("/") + name;
+    QString schemePath = Qt6CT::userColorSchemePath() + QLatin1Char('/') + name;
 
     createColorScheme(schemePath, palette());
-    m_ui->colorSchemeComboBox->addItem(name.section('.',0,0), schemePath);
+    m_ui->colorSchemeComboBox->addItem(name.section(QLatin1Char('.'),0,0), schemePath);
 }
 
 void AppearancePage::changeColorScheme()
@@ -178,7 +210,7 @@ void AppearancePage::changeColorScheme()
     }
 
     PaletteEditDialog d(m_customPalette, m_selectedStyle, this);
-    connect(&d, SIGNAL(paletteChanged(QPalette)), SLOT(setPreviewPalette(QPalette)));
+    connect(&d, &PaletteEditDialog::paletteChanged, this, &AppearancePage::setPreviewPalette);
     if(d.exec() == QDialog::Accepted)
     {
         m_customPalette = d.selectedPalette();
@@ -225,23 +257,23 @@ void AppearancePage::copyColorScheme()
     if(name.isEmpty() || name == m_ui->colorSchemeComboBox->currentText())
         return;
 
-    if(!name.endsWith(".conf", Qt::CaseInsensitive))
-        name.append(".conf");
+    if(!name.endsWith(u".conf"_s, Qt::CaseInsensitive))
+        name.append(u".conf"_s);
 
-    if(m_ui->colorSchemeComboBox->findText(name.section('.',0,0)) != -1)
+    if(m_ui->colorSchemeComboBox->findText(name.section(QLatin1Char('.'),0,0)) != -1)
     {
         QMessageBox::warning(this, tr("Error"), tr("The color scheme \"%1\" already exists")
-                             .arg(name.section('.',0,0)));
+                             .arg(name.section(QLatin1Char('.'),0,0)));
         return;
     }
 
-    QString newPath =  Qt6CT::userColorSchemePath() + QLatin1String("/") + name;
+    QString newPath = Qt6CT::userColorSchemePath() + QLatin1String("/") + name;
     if(!QFile::copy(m_ui->colorSchemeComboBox->currentData().toString(), newPath))
     {
         QMessageBox::warning(this, tr("Error"), tr("Unable to copy file"));
         return;
     }
-    m_ui->colorSchemeComboBox->addItem(name.section('.',0,0), newPath);
+    m_ui->colorSchemeComboBox->addItem(name.section(QLatin1Char('.'),0,0), newPath);
 }
 
 void AppearancePage::renameColorScheme()
@@ -263,19 +295,19 @@ void AppearancePage::renameColorScheme()
     if(name.isEmpty() || name == m_ui->colorSchemeComboBox->currentText())
         return;
 
-    if(!name.endsWith(".conf", Qt::CaseInsensitive))
-        name.append(".conf");
+    if(!name.endsWith(u".conf"_s, Qt::CaseInsensitive))
+        name.append(u".conf"_s);
 
-    if(m_ui->colorSchemeComboBox->findText(name.section('.',0,0)) != -1)
+    if(m_ui->colorSchemeComboBox->findText(name.section(QLatin1Char('.'),0,0)) != -1)
     {
         QMessageBox::warning(this, tr("Error"), tr("The color scheme \"%1\" already exists")
-                             .arg(name.section('.',0,0)));
+                             .arg(name.section(QLatin1Char('.'),0,0)));
         return;
     }
 
-    QString newPath =  Qt6CT::userColorSchemePath() + QLatin1String("/") + name;
+    QString newPath = Qt6CT::userColorSchemePath() + QLatin1Char('/') + name;
     QFile::rename(m_ui->colorSchemeComboBox->currentData().toString(), newPath);
-    m_ui->colorSchemeComboBox->setItemText(index, name.section('.',0,0));
+    m_ui->colorSchemeComboBox->setItemText(index, name.section(QLatin1Char('.'),0,0));
     m_ui->colorSchemeComboBox->setItemData(index, newPath);
 }
 
@@ -284,8 +316,7 @@ void AppearancePage::updatePalette()
     if(!m_selectedStyle)
         return;
 
-    setPreviewPalette(m_ui->customPaletteButton->isChecked() ?
-                          m_customPalette : m_selectedStyle->standardPalette());
+    setPreviewPalette(m_customPalette);
 }
 
 void AppearancePage::setPreviewPalette(const QPalette &p)
@@ -331,36 +362,53 @@ void AppearancePage::updateActions()
     }
 }
 
+void AppearancePage::changeEvent(QEvent *event)
+{
+    //restore preview palette after stylesheet change
+    if(event->type() == QEvent::ThemeChange)
+        updatePalette();
+
+    TabPage::changeEvent(event);
+}
+
 void AppearancePage::readSettings()
 {
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    settings.beginGroup("Appearance");
-    QString style = settings.value("style", "Fusion").toString();
+    settings.beginGroup("Appearance"_L1);
+    QString style = settings.value("style"_L1, u"Fusion"_s).toString();
     m_ui->styleComboBox->setCurrentText(style);
 
-    m_ui->customPaletteButton->setChecked(settings.value("custom_palette", false).toBool());
-    QString colorSchemePath = settings.value("color_scheme_path").toString();
+    QString colorSchemePath = settings.value("color_scheme_path"_L1).toString();
     colorSchemePath = Qt6CT::resolvePath(colorSchemePath); //replace environment variables
 
-    QDir("/").mkpath(Qt6CT::userColorSchemePath());
+    m_ui->colorSchemeComboBox->addItem(tr("Default"), u"system"_s);
+    m_ui->colorSchemeComboBox->addItem(tr("Style's colors"), u"style"_s);
+    m_ui->colorSchemeComboBox->insertSeparator(2);
+
+    QDir::root().mkpath(Qt6CT::userColorSchemePath());
     findColorSchemes(Qt6CT::userColorSchemePath());
     findColorSchemes(Qt6CT::sharedColorSchemePaths());
 
-    if(m_ui->colorSchemeComboBox->count() == 0)
+    if(settings.value("custom_palette"_L1, false).toBool())
     {
-        m_customPalette = palette(); //load fallback palette
+        int index = m_ui->colorSchemeComboBox->findData(colorSchemePath);
+        if(index < 0 && colorSchemePath == Qt6CT::styleColorSchemeFile())
+            index = m_ui->colorSchemeComboBox->findData(u"style"_s);
+
+        m_ui->colorSchemeComboBox->setCurrentIndex(index);
+        m_customPalette = Qt6CT::loadColorScheme(colorSchemePath).value_or(palette());
     }
     else
     {
-        int index = m_ui->colorSchemeComboBox->findData(colorSchemePath);
-        if(index >= 0)
-            m_ui->colorSchemeComboBox->setCurrentIndex(index);
-        m_customPalette = Qt6CT::loadColorScheme(m_ui->colorSchemeComboBox->currentData().toString()).value_or(palette());
+        int index = m_ui->colorSchemeComboBox->findData("system"_L1);
+        m_ui->colorSchemeComboBox->setCurrentIndex(index);
+        QPlatformTheme t;
+        m_customPalette = *t.palette();
     }
 
     on_styleComboBox_textActivated(m_ui->styleComboBox->currentText());
 
-    int index = m_ui->dialogComboBox->findData(settings.value("standard_dialogs").toString());
+    int index = m_ui->dialogComboBox->findData(settings.value("standard_dialogs"_L1).toString());
     m_ui->dialogComboBox->setCurrentIndex(qMax(index, 0));
 
     settings.endGroup();
@@ -394,10 +442,9 @@ void AppearancePage::findColorSchemes(const QString &path)
 {
     QDir dir(path);
     dir.setFilter(QDir::Files);
-    QStringList nameFilters;
-    nameFilters << "*.conf";
+    QStringList nameFilters = { u"*.conf"_s };
 #if defined KF_CONFIGCORE_LIB && defined KF_COLORSCHEME_LIB
-    nameFilters << "*.colors";
+    nameFilters << u"*.colors"_s;
 #endif
     dir.setNameFilters(nameFilters);
 
@@ -426,7 +473,7 @@ void AppearancePage::findColorSchemes(const QStringList &paths)
 void AppearancePage::createColorScheme(const QString &name, const QPalette &palette)
 {
     QSettings settings(name, QSettings::IniFormat);
-    settings.beginGroup("ColorScheme");
+    settings.beginGroup("ColorScheme"_L1);
 
     QStringList activeColors, inactiveColors, disabledColors;
     for (int i = 0; i < QPalette::NColorRoles; i++)
@@ -437,9 +484,9 @@ void AppearancePage::createColorScheme(const QString &name, const QPalette &pale
         disabledColors << palette.color(QPalette::Disabled, role).name(QColor::HexArgb);
     }
 
-    settings.setValue("active_colors",activeColors);
-    settings.setValue("inactive_colors",inactiveColors);
-    settings.setValue("disabled_colors",disabledColors);
+    settings.setValue("active_colors"_L1, activeColors);
+    settings.setValue("inactive_colors"_L1, inactiveColors);
+    settings.setValue("disabled_colors"_L1, disabledColors);
 
     settings.endGroup();
 }

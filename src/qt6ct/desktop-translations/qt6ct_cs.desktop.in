@@ -37,6 +37,6 @@ Keywords=settings;desktop;qt;qtsettings;qt6;
 
 
 # Translations
-Icon[cs]=nastavení-plocha-vzhled
 Name[cs]=Nastavení Qt6
 Comment[cs]=Nástroj na nastavení Qt6
+Icon[cs]=nastavení-plocha-vzhled

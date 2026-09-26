@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -30,6 +30,7 @@
 #include <QFile>
 #include <QDir>
 #include <QMessageBox>
+#include "qt6ct.h"
 #include "fontconfigdialog.h"
 #include "ui_fontconfigdialog.h"
 
@@ -39,21 +40,21 @@ FontConfigDialog::FontConfigDialog(QWidget *parent) :
 {
     m_ui->setupUi(this);
 
-    m_ui->hintingStyleComboBox->addItem(tr("None"), "hintnone");
-    m_ui->hintingStyleComboBox->addItem(tr("Slight"), "hintslight");
-    m_ui->hintingStyleComboBox->addItem(tr("Medium"), "hintmedium");
-    m_ui->hintingStyleComboBox->addItem(tr("Full"), "hintfull");
+    m_ui->hintingStyleComboBox->addItem(tr("None"), u"hintnone"_s);
+    m_ui->hintingStyleComboBox->addItem(tr("Slight"), u"hintslight"_s);
+    m_ui->hintingStyleComboBox->addItem(tr("Medium"), u"hintmedium"_s);
+    m_ui->hintingStyleComboBox->addItem(tr("Full"), u"hintfull"_s);
 
-    m_ui->rgbaComboBox->addItem(tr("None"), "none");
-    m_ui->rgbaComboBox->addItem("rgb", "rgb");
-    m_ui->rgbaComboBox->addItem("bgr", "bgr");
-    m_ui->rgbaComboBox->addItem("vrgb", "vrgb");
-    m_ui->rgbaComboBox->addItem("vbgr", "vbgr");
+    m_ui->rgbaComboBox->addItem(tr("None"), u"none"_s);
+    m_ui->rgbaComboBox->addItem(u"rgb"_s, u"rgb"_s);
+    m_ui->rgbaComboBox->addItem(u"bgr"_s, u"bgr"_s);
+    m_ui->rgbaComboBox->addItem(u"vrgb"_s, u"vrgb"_s);
+    m_ui->rgbaComboBox->addItem(u"vbgr"_s, u"vbgr"_s);
 
-    m_ui->lcdFilterComboBox->addItem("lcdnone");
-    m_ui->lcdFilterComboBox->addItem("lcddefault");
-    m_ui->lcdFilterComboBox->addItem("lcdlight");
-    m_ui->lcdFilterComboBox->addItem("lcdlegacy");
+    m_ui->lcdFilterComboBox->addItem(u"lcdnone"_s);
+    m_ui->lcdFilterComboBox->addItem(u"lcddefault"_s);
+    m_ui->lcdFilterComboBox->addItem(u"lcdlight"_s);
+    m_ui->lcdFilterComboBox->addItem(u"lcdlegacy"_s);
 }
 
 FontConfigDialog::~FontConfigDialog()
@@ -63,8 +64,8 @@ FontConfigDialog::~FontConfigDialog()
 
 void FontConfigDialog::accept()
 {
-    QDir::home().mkpath(".config/fontconfig/");
-    QString path = QDir::homePath() + "/.config/fontconfig/fonts.conf";
+    QDir::home().mkpath(u".config/fontconfig/"_s);
+    QString path = QDir::homePath() + u"/.config/fontconfig/fonts.conf"_s;
     qDebug("FontConfigDialog: fontconfig path: %s", qPrintable(path));
 
 
@@ -78,8 +79,8 @@ void FontConfigDialog::accept()
             return;
         }
 
-        QFile::remove(path + ".back");
-        QFile::copy(path, path + ".back");
+        QFile::remove(path + u".back"_s);
+        QFile::copy(path, path + u".back"_s);
     }
 
     QFile file(path);
@@ -93,32 +94,32 @@ void FontConfigDialog::accept()
     stream.setAutoFormatting(true);
 
     stream.writeStartDocument();
-    stream.writeDTD("<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">");
-    stream.writeStartElement("fontconfig");
+    stream.writeDTD("<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">"_L1);
+    stream.writeStartElement("fontconfig"_L1);
 
-    stream.writeStartElement("match");
-    stream.writeAttribute("target", "font");
-    writeOption(&stream, "antialias", m_ui->antialisingCheckBox->isChecked());
-    writeOption(&stream, "hinting", m_ui->hintingCheckBox->isChecked());
-    writeOption(&stream, "hintstyle", m_ui->hintingStyleComboBox->currentData().toString());
-    writeOption(&stream, "rgba", m_ui->rgbaComboBox->currentData().toString());
-    writeOption(&stream, "autohint", m_ui->autohinterCheckBox->isChecked());
-    writeOption(&stream, "lcdfilter", m_ui->lcdFilterComboBox->currentText());
-    writeOption(&stream, "dpi", m_ui->dpiSpinBox->value());
+    stream.writeStartElement("match"_L1);
+    stream.writeAttribute("target"_L1, "font"_L1);
+    writeOption(&stream, u"antialias"_s, m_ui->antialisingCheckBox->isChecked());
+    writeOption(&stream, u"hinting"_s, m_ui->hintingCheckBox->isChecked());
+    writeOption(&stream, u"hintstyle"_s, m_ui->hintingStyleComboBox->currentData().toString());
+    writeOption(&stream, u"rgba"_s, m_ui->rgbaComboBox->currentData().toString());
+    writeOption(&stream, u"autohint"_s, m_ui->autohinterCheckBox->isChecked());
+    writeOption(&stream, u"lcdfilter"_s, m_ui->lcdFilterComboBox->currentText());
+    writeOption(&stream, u"dpi"_s, m_ui->dpiSpinBox->value());
     stream.writeEndElement();
 
     if(m_ui->disableBoldAutohintCheckBox->isChecked())
     {
-        stream.writeStartElement("match");
-        stream.writeAttribute("target", "font");
+        stream.writeStartElement("match"_L1);
+        stream.writeAttribute("target"_L1, "font"_L1);
 
-        stream.writeStartElement("test");
-        stream.writeAttribute("name", "weight");
-        stream.writeAttribute("compare", "more");
-        stream.writeTextElement("const", "medium");
+        stream.writeStartElement("test"_L1);
+        stream.writeAttribute("name"_L1, "weight"_L1);
+        stream.writeAttribute("compare"_L1, "more"_L1);
+        stream.writeTextElement("const"_L1, "medium"_L1);
         stream.writeEndElement();
 
-        writeOption(&stream, "autohint", m_ui->autohinterCheckBox->isChecked());
+        writeOption(&stream, u"autohint"_s, m_ui->autohinterCheckBox->isChecked());
 
         stream.writeEndElement();
     }
@@ -130,14 +131,14 @@ void FontConfigDialog::accept()
 
 void FontConfigDialog::writeOption(QXmlStreamWriter *stream, const QString &name, const QVariant &value)
 {
-    stream->writeStartElement("edit");
-    stream->writeAttribute("name", name);
-    stream->writeAttribute("mode", "assign");
+    stream->writeStartElement("edit"_L1);
+    stream->writeAttribute("name"_L1, name);
+    stream->writeAttribute("mode"_L1, "assign"_L1);
     if(value.typeId() == QMetaType::QString)
-        stream->writeTextElement("const", value.toString());
+        stream->writeTextElement("const"_L1, value.toString());
     else if(value.typeId() == QMetaType::Int)
-        stream->writeTextElement("double", QString::number(value.toInt()));
+        stream->writeTextElement("double"_L1, QString::number(value.toInt()));
     else if(value.typeId() == QMetaType::Bool)
-        stream->writeTextElement("bool", value.toBool() ? QStringLiteral("true") : QStringLiteral("false"));
+        stream->writeTextElement("bool"_L1, value.toBool() ? QStringLiteral("true") : QStringLiteral("false"));
     stream->writeEndElement();
 }

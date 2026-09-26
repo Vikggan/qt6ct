@@ -4,155 +4,145 @@
 <context>
     <name>AppearancePage</name>
     <message>
-        <location filename="../appearancepage.ui" line="20"/>
+        <location filename="../appearancepage.ui" line="22"/>
         <source>Style:</source>
         <translation>Stijl:</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="59"/>
+        <location filename="../appearancepage.ui" line="107"/>
         <source>Preview</source>
         <translation>Voorvertoning</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="69"/>
+        <location filename="../appearancepage.ui" line="117"/>
         <source>Active palette</source>
         <translation>Actief kleurenschema</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="74"/>
+        <location filename="../appearancepage.ui" line="122"/>
         <source>Inactive palette</source>
         <translation>Inactief kleurenschema</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="79"/>
+        <location filename="../appearancepage.ui" line="127"/>
         <source>Disabled palette</source>
         <translation>Uitgeschakeld kleurenschema</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="113"/>
-        <source>Palette</source>
-        <translation>Kleurenschema</translation>
-    </message>
-    <message>
-        <location filename="../appearancepage.ui" line="124"/>
-        <location filename="../appearancepage.cpp" line="85"/>
+        <location filename="../appearancepage.cpp" line="84"/>
+        <location filename="../appearancepage.cpp" line="370"/>
         <source>Default</source>
         <translation>Standaard</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="134"/>
-        <source>Custom</source>
-        <translation>Aangepast</translation>
-    </message>
-    <message>
-        <location filename="../appearancepage.ui" line="161"/>
+        <location filename="../appearancepage.ui" line="42"/>
         <source>Color scheme:</source>
         <translation>Kleurenschema:</translation>
     </message>
     <message>
-        <location filename="../appearancepage.ui" line="187"/>
-        <source>...</source>
-        <translation>…</translation>
-    </message>
-    <message>
-        <location filename="../appearancepage.ui" line="218"/>
+        <location filename="../appearancepage.ui" line="82"/>
         <source>Standard dialogs:</source>
         <translation>Standaard dialoogvensters:</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="72"/>
+        <location filename="../appearancepage.cpp" line="71"/>
         <source>Create</source>
         <translation>Maken</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="73"/>
+        <location filename="../appearancepage.cpp" line="72"/>
         <source>Edit</source>
         <translation>Bewerken</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="74"/>
+        <location filename="../appearancepage.cpp" line="73"/>
         <source>Create a Copy</source>
         <translation>Kopie maken</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="75"/>
+        <location filename="../appearancepage.cpp" line="74"/>
         <source>Rename</source>
         <translation>Naam wijzigen</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="77"/>
+        <location filename="../appearancepage.cpp" line="76"/>
         <source>Remove</source>
         <translation>Verwijderen</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="136"/>
-        <location filename="../appearancepage.cpp" line="210"/>
-        <location filename="../appearancepage.cpp" line="249"/>
+        <location filename="../appearancepage.cpp" line="167"/>
+        <location filename="../appearancepage.cpp" line="241"/>
+        <location filename="../appearancepage.cpp" line="280"/>
         <source>Enter Color Scheme Name</source>
         <translation>Geef dit kleurenschema een naam</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="136"/>
-        <location filename="../appearancepage.cpp" line="210"/>
-        <location filename="../appearancepage.cpp" line="249"/>
+        <location filename="../appearancepage.cpp" line="167"/>
+        <location filename="../appearancepage.cpp" line="241"/>
+        <location filename="../appearancepage.cpp" line="280"/>
         <source>File name:</source>
         <translation>Bestandsnaam:</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="145"/>
-        <location filename="../appearancepage.cpp" line="221"/>
-        <location filename="../appearancepage.cpp" line="229"/>
-        <location filename="../appearancepage.cpp" line="259"/>
+        <location filename="../appearancepage.cpp" line="176"/>
+        <location filename="../appearancepage.cpp" line="252"/>
+        <location filename="../appearancepage.cpp" line="260"/>
+        <location filename="../appearancepage.cpp" line="290"/>
         <source>Error</source>
-        <translation>Fout</translation>
+        <translation>Foutmelding</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="145"/>
-        <location filename="../appearancepage.cpp" line="221"/>
-        <location filename="../appearancepage.cpp" line="259"/>
+        <location filename="../appearancepage.cpp" line="176"/>
+        <location filename="../appearancepage.cpp" line="252"/>
+        <location filename="../appearancepage.cpp" line="290"/>
         <source>The color scheme &quot;%1&quot; already exists</source>
-        <translation>Het kleurenschema “%1” bestaat al</translation>
+        <translation>“%1” bestaat al</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="163"/>
-        <location filename="../appearancepage.cpp" line="186"/>
-        <location filename="../appearancepage.cpp" line="244"/>
+        <location filename="../appearancepage.cpp" line="194"/>
+        <location filename="../appearancepage.cpp" line="217"/>
+        <location filename="../appearancepage.cpp" line="275"/>
         <source>Warning</source>
         <translation>Waarschuwing</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="163"/>
-        <location filename="../appearancepage.cpp" line="186"/>
-        <location filename="../appearancepage.cpp" line="244"/>
+        <location filename="../appearancepage.cpp" line="194"/>
+        <location filename="../appearancepage.cpp" line="217"/>
+        <location filename="../appearancepage.cpp" line="275"/>
         <source>The color scheme &quot;%1&quot; is read only</source>
-        <translation>Het kleurenschema “%1” is alleen-lezen</translation>
+        <translation>“%1” is alleen-lezen</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="191"/>
+        <location filename="../appearancepage.cpp" line="222"/>
         <source>Confirm Remove</source>
         <translation>Verwijderen bevestigen</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="192"/>
+        <location filename="../appearancepage.cpp" line="223"/>
         <source>Are you sure you want to remove color scheme &quot;%1&quot;?</source>
         <translation>Weet je zeker dat je het kleurenschema “%1” wilt verwijderen?</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="212"/>
+        <location filename="../appearancepage.cpp" line="243"/>
         <source>%1 (copy)</source>
         <translation>%1 (kopie)</translation>
     </message>
     <message>
-        <location filename="../appearancepage.cpp" line="229"/>
+        <location filename="../appearancepage.cpp" line="260"/>
         <source>Unable to copy file</source>
         <translation>Het bestand kan niet worden gekopieerd</translation>
+    </message>
+    <message>
+        <location filename="../appearancepage.cpp" line="371"/>
+        <source>Style&apos;s colors</source>
+        <translation>Stijlkleuren</translation>
     </message>
 </context>
 <context>
     <name>FontConfigDialog</name>
     <message>
         <location filename="../fontconfigdialog.ui" line="14"/>
-        <location filename="../fontconfigdialog.cpp" line="73"/>
+        <location filename="../fontconfigdialog.cpp" line="74"/>
         <source>Font Configuration</source>
         <translation>Lettertype-instellingen</translation>
     </message>
@@ -202,28 +192,28 @@
         <translation>Stijl van subpixelweergave:</translation>
     </message>
     <message>
-        <location filename="../fontconfigdialog.cpp" line="42"/>
-        <location filename="../fontconfigdialog.cpp" line="47"/>
+        <location filename="../fontconfigdialog.cpp" line="43"/>
+        <location filename="../fontconfigdialog.cpp" line="48"/>
         <source>None</source>
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../fontconfigdialog.cpp" line="43"/>
+        <location filename="../fontconfigdialog.cpp" line="44"/>
         <source>Slight</source>
         <translation>Licht</translation>
     </message>
     <message>
-        <location filename="../fontconfigdialog.cpp" line="44"/>
+        <location filename="../fontconfigdialog.cpp" line="45"/>
         <source>Medium</source>
         <translation>Gemiddeld</translation>
     </message>
     <message>
-        <location filename="../fontconfigdialog.cpp" line="45"/>
+        <location filename="../fontconfigdialog.cpp" line="46"/>
         <source>Full</source>
         <translation>Volledig</translation>
     </message>
     <message>
-        <location filename="../fontconfigdialog.cpp" line="74"/>
+        <location filename="../fontconfigdialog.cpp" line="75"/>
         <source>&lt;i&gt;%1&lt;/i&gt; already exists. Do you want to replace it?</source>
         <translation>&lt;i&gt;%1&lt;/i&gt; bestaat al. Wil je het vervangen?</translation>
     </message>
@@ -259,12 +249,12 @@
         <translation>fonts.conf verwijderen</translation>
     </message>
     <message>
-        <location filename="../fontspage.cpp" line="110"/>
+        <location filename="../fontspage.cpp" line="112"/>
         <source>Remove Font Configuration</source>
-        <translation>Lettertypeconfiguatie verwijderen</translation>
+        <translation>Lettertypeinstellingen verwijderen</translation>
     </message>
     <message>
-        <location filename="../fontspage.cpp" line="111"/>
+        <location filename="../fontspage.cpp" line="113"/>
         <source>Are you sure you want to delete &lt;i&gt;%1&lt;/i&gt;?</source>
         <translation>Weet je zeker dat je &lt;i&gt;%1&lt;/i&gt; wilt verwijderen?</translation>
     </message>
@@ -332,7 +322,7 @@
     <message>
         <location filename="../interfacepage.ui" line="175"/>
         <source>Enable gui effects</source>
-        <translation>Effecten inschakelen</translation>
+        <translation>Effecten gebruiken</translation>
     </message>
     <message>
         <location filename="../interfacepage.ui" line="182"/>
@@ -475,7 +465,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="126"/>
         <source>The &lt;b&gt;QT_QPA_PLATFORMTHEME&lt;/b&gt; environment variable is not set (required values: &lt;b&gt;qt6ct&lt;/b&gt; or &lt;b&gt;qt5ct&lt;/b&gt;).</source>
-        <translation>De &lt;b&gt;QT_QPA_PLATFORMTHEME&lt;/b&gt;-omgevingsvariabel is niet juist ingesteld. Vereiste waarden: &lt;b&gt;qt6ct&lt;/b&gt; of &lt;b&gt;qt5ct&lt;/b&gt;.</translation>
+        <translation>De &lt;b&gt;QT_QPA_PLATFORMTHEME&lt;/b&gt;-omgevingsvariabele is niet goed ingesteld. Vereiste waarden: &lt;b&gt;qt6ct&lt;/b&gt; of &lt;b&gt;qt5ct&lt;/b&gt;.</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="131"/>
@@ -633,7 +623,7 @@
     <message>
         <location filename="../paletteeditdialog.cpp" line="93"/>
         <source>Placeholder text</source>
-        <translation>Plaatshoudertekst</translation>
+        <translation>Opvultekst</translation>
     </message>
     <message>
         <location filename="../paletteeditdialog.cpp" line="97"/>
@@ -643,7 +633,7 @@
     <message>
         <location filename="../paletteeditdialog.cpp" line="110"/>
         <source>Select Color</source>
-        <translation>Kleur selecteren</translation>
+        <translation>Kleur kiezen</translation>
     </message>
 </context>
 <context>
@@ -752,7 +742,7 @@
     <message>
         <location filename="../qsspage.cpp" line="116"/>
         <source>The file &quot;%1&quot; already exists</source>
-        <translation>Het bestand “%1” bestaat al</translation>
+        <translation>“%1” bestaat al</translation>
     </message>
     <message>
         <location filename="../qsspage.cpp" line="150"/>
@@ -778,7 +768,7 @@
         <location filename="../qsspage.cpp" line="217"/>
         <location filename="../qsspage.cpp" line="262"/>
         <source>The style sheet &quot;%1&quot; already exists</source>
-        <translation>Het stijlblad “%1” bestaat al</translation>
+        <translation>“%1” bestaat al</translation>
     </message>
     <message>
         <location filename="../qsspage.cpp" line="225"/>
@@ -821,7 +811,7 @@
     <message>
         <location filename="../troubleshootingpage.ui" line="82"/>
         <source>Make top-level widgets use pure raster surfaces, and do not support non-native GL-based child widgets.</source>
-        <translation>Dit zorgt er voor dat zichtbare elementen worden uitgelijnd op een rooster en geen ondersteuning hebben voor onderliggende OpenGL-widgets.</translation>
+        <translation>Dit zorgt ervoor dat zichtbare elementen worden uitgelijnd op een rooster en geen ondersteuning hebben voor onderliggende OpenGL-widgets.</translation>
     </message>
     <message>
         <location filename="../troubleshootingpage.ui" line="85"/>

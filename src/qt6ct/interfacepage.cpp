@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -40,17 +40,17 @@ InterfacePage::InterfacePage(QWidget *parent) :
 {
     m_ui->setupUi(this);
 
-    m_ui->buttonLayoutComboBox->addItem("Windows", QDialogButtonBox::WinLayout);
-    m_ui->buttonLayoutComboBox->addItem("Mac OS X", QDialogButtonBox::MacLayout);
-    m_ui->buttonLayoutComboBox->addItem("KDE", QDialogButtonBox::KdeLayout);
-    m_ui->buttonLayoutComboBox->addItem("GNOME", QDialogButtonBox::GnomeLayout);
+    m_ui->buttonLayoutComboBox->addItem(u"Windows"_s, QDialogButtonBox::WinLayout);
+    m_ui->buttonLayoutComboBox->addItem(u"Mac OS X"_s, QDialogButtonBox::MacLayout);
+    m_ui->buttonLayoutComboBox->addItem(u"KDE"_s, QDialogButtonBox::KdeLayout);
+    m_ui->buttonLayoutComboBox->addItem(u"GNOME"_s, QDialogButtonBox::GnomeLayout);
 
-    m_ui->keyboardSchemeComboBox->addItem("Windows", QPlatformTheme::WindowsKeyboardScheme);
-    m_ui->keyboardSchemeComboBox->addItem("Mac OS X", QPlatformTheme::MacKeyboardScheme);
-    m_ui->keyboardSchemeComboBox->addItem("X11", QPlatformTheme::X11KeyboardScheme);
-    m_ui->keyboardSchemeComboBox->addItem("KDE", QPlatformTheme::KdeKeyboardScheme);
-    m_ui->keyboardSchemeComboBox->addItem("GNOME", QPlatformTheme::GnomeKeyboardScheme);
-    m_ui->keyboardSchemeComboBox->addItem("CDE", QPlatformTheme::CdeKeyboardScheme);
+    m_ui->keyboardSchemeComboBox->addItem(u"Windows"_s, QPlatformTheme::WindowsKeyboardScheme);
+    m_ui->keyboardSchemeComboBox->addItem(u"Mac OS X"_s, QPlatformTheme::MacKeyboardScheme);
+    m_ui->keyboardSchemeComboBox->addItem(u"X11"_s, QPlatformTheme::X11KeyboardScheme);
+    m_ui->keyboardSchemeComboBox->addItem(u"KDE"_s, QPlatformTheme::KdeKeyboardScheme);
+    m_ui->keyboardSchemeComboBox->addItem(u"GNOME"_s, QPlatformTheme::GnomeKeyboardScheme);
+    m_ui->keyboardSchemeComboBox->addItem(u"CDE"_s, QPlatformTheme::CdeKeyboardScheme);
 
     m_ui->toolButtonStyleComboBox->addItem(tr("Only display the icon"), Qt::ToolButtonIconOnly);
     m_ui->toolButtonStyleComboBox->addItem(tr("Only display the text"), Qt::ToolButtonTextOnly);
@@ -68,59 +68,59 @@ InterfacePage::~InterfacePage()
 
 void InterfacePage::writeSettings(QSettings *settings)
 {
-    settings->beginGroup("Interface");
-    settings->setValue("double_click_interval", m_ui->doubleClickIntervalSpinBox->value());
-    settings->setValue("cursor_flash_time", m_ui->cursorFlashTimeSpinBox->value());
-    settings->setValue("buttonbox_layout", m_ui->buttonLayoutComboBox->currentData());
-    settings->setValue("keyboard_scheme", m_ui->keyboardSchemeComboBox->currentData());
-    settings->setValue("menus_have_icons", m_ui->menuIconsCheckBox->isChecked());
-    settings->setValue("show_shortcuts_in_context_menus", m_ui->showShortcutsInMenusCheckBox->isChecked());
+    settings->beginGroup("Interface"_L1);
+    settings->setValue("double_click_interval"_L1, m_ui->doubleClickIntervalSpinBox->value());
+    settings->setValue("cursor_flash_time"_L1, m_ui->cursorFlashTimeSpinBox->value());
+    settings->setValue("buttonbox_layout"_L1, m_ui->buttonLayoutComboBox->currentData());
+    settings->setValue("keyboard_scheme"_L1, m_ui->keyboardSchemeComboBox->currentData());
+    settings->setValue("menus_have_icons"_L1, m_ui->menuIconsCheckBox->isChecked());
+    settings->setValue("show_shortcuts_in_context_menus"_L1, m_ui->showShortcutsInMenusCheckBox->isChecked());
 
-    settings->setValue("underline_shortcut", m_ui->shortcutUnderlineCheckBox->checkState());
-    settings->setValue("activate_item_on_single_click", m_ui->singleClickCheckBox->checkState());
-    settings->setValue("dialog_buttons_have_icons", m_ui->dialogIconsCheckBox->checkState());
-    settings->setValue("toolbutton_style", m_ui->toolButtonStyleComboBox->currentData());
-    settings->setValue("wheel_scroll_lines", m_ui->wheelScrollLinesSpinBox->value());
+    settings->setValue("underline_shortcut"_L1, m_ui->shortcutUnderlineCheckBox->checkState());
+    settings->setValue("activate_item_on_single_click"_L1, m_ui->singleClickCheckBox->checkState());
+    settings->setValue("dialog_buttons_have_icons"_L1, m_ui->dialogIconsCheckBox->checkState());
+    settings->setValue("toolbutton_style"_L1, m_ui->toolButtonStyleComboBox->currentData());
+    settings->setValue("wheel_scroll_lines"_L1, m_ui->wheelScrollLinesSpinBox->value());
 
     QStringList effects;
     if(m_ui->guiEffectsCheckBox->isChecked())
-        effects << "General";
+        effects << u"General"_s;
 
     if(m_ui->menuEffectComboBox->currentIndex() == 1)
-        effects << "AnimateMenu";
+        effects << u"AnimateMenu"_s;
     else if(m_ui->menuEffectComboBox->currentIndex() == 2)
-        effects << "FadeMenu";
+        effects << u"FadeMenu"_s;
 
     if(m_ui->comboBoxEffectComboBox->currentIndex() == 1)
-        effects << "AnimateCombo";
+        effects << u"AnimateCombo"_s;
 
     if(m_ui->toolTipEffectComboBox->currentIndex() == 1)
-        effects << "AnimateTooltip";
+        effects << u"AnimateTooltip"_s;
     else if(m_ui->toolTipEffectComboBox->currentIndex() == 2)
-        effects << "FadeTooltip";
+        effects << u"FadeTooltip"_s;
 
     if(m_ui->toolBoxEffectComboBox->currentIndex() == 1)
-        effects << "AnimateToolBox";
+        effects << u"AnimateToolBox"_s;
 
-    settings->setValue("gui_effects", effects);
+    settings->setValue("gui_effects"_L1, effects);
     settings->endGroup();
 }
 
 void InterfacePage::readSettings()
 {
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    settings.beginGroup("Interface");
+    settings.beginGroup("Interface"_L1);
     m_ui->doubleClickIntervalSpinBox->setValue(qApp->doubleClickInterval());
     m_ui->cursorFlashTimeSpinBox->setValue(qApp->cursorFlashTime());
 
     m_ui->guiEffectsCheckBox->setChecked(qApp->isEffectEnabled(Qt::UI_General));
 
-    int layout = settings.value("buttonbox_layout", style()->styleHint(QStyle::SH_DialogButtonLayout)).toInt();
+    int layout = settings.value("buttonbox_layout"_L1, style()->styleHint(QStyle::SH_DialogButtonLayout)).toInt();
     int index = m_ui->buttonLayoutComboBox->findData(layout);
     if(index >= 0)
         m_ui->buttonLayoutComboBox->setCurrentIndex(index);
 
-    int scheme = settings.value("keyboard_scheme", QPlatformTheme::X11KeyboardScheme).toInt();
+    int scheme = settings.value("keyboard_scheme"_L1, QPlatformTheme::X11KeyboardScheme).toInt();
     index = m_ui->keyboardSchemeComboBox->findData(scheme);
     if(index >= 0)
         m_ui->keyboardSchemeComboBox->setCurrentIndex(index);
@@ -141,20 +141,20 @@ void InterfacePage::readSettings()
     if(qApp->isEffectEnabled(Qt::UI_AnimateToolBox))
         m_ui->toolBoxEffectComboBox->setCurrentIndex(1);
 
-    m_ui->singleClickCheckBox->setCheckState(Qt::CheckState(settings.value("activate_item_on_single_click", Qt::PartiallyChecked).toInt()));
-    m_ui->dialogIconsCheckBox->setCheckState(Qt::CheckState(settings.value("dialog_buttons_have_icons", Qt::PartiallyChecked).toInt()));
-    m_ui->shortcutUnderlineCheckBox->setCheckState(Qt::CheckState(settings.value("underline_shortcut", Qt::PartiallyChecked).toInt()));
+    m_ui->singleClickCheckBox->setCheckState(Qt::CheckState(settings.value("activate_item_on_single_click"_L1, Qt::PartiallyChecked).toInt()));
+    m_ui->dialogIconsCheckBox->setCheckState(Qt::CheckState(settings.value("dialog_buttons_have_icons"_L1, Qt::PartiallyChecked).toInt()));
+    m_ui->shortcutUnderlineCheckBox->setCheckState(Qt::CheckState(settings.value("underline_shortcut"_L1, Qt::PartiallyChecked).toInt()));
 
     m_ui->menuIconsCheckBox->setChecked(!qApp->testAttribute(Qt::AA_DontShowIconsInMenus));
-    m_ui->showShortcutsInMenusCheckBox->setChecked(settings.value("show_shortcuts_in_context_menus", true).toBool());
+    m_ui->showShortcutsInMenusCheckBox->setChecked(settings.value("show_shortcuts_in_context_menus"_L1, true).toBool());
     m_ui->showShortcutsInMenusCheckBox->setVisible(false);
 
-    int toolbarStyle = settings.value("toolbutton_style", Qt::ToolButtonFollowStyle).toInt();
+    int toolbarStyle = settings.value("toolbutton_style"_L1, Qt::ToolButtonFollowStyle).toInt();
     index = m_ui->toolButtonStyleComboBox->findData(toolbarStyle);
     if(index >= 0)
         m_ui->toolButtonStyleComboBox->setCurrentIndex(index);
 
-    m_ui->wheelScrollLinesSpinBox->setValue(settings.value("wheel_scroll_lines", 3).toInt());
+    m_ui->wheelScrollLinesSpinBox->setValue(settings.value("wheel_scroll_lines"_L1, 3).toInt());
 
     settings.endGroup();
 }

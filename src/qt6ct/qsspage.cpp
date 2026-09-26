@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -45,21 +45,21 @@ QSSPage::QSSPage(QWidget *parent) :
     m_ui(new Ui::QSSPage)
 {
     m_ui->setupUi(this);
-    QDir("/").mkpath(Qt6CT::userStyleSheetPath());
+    QDir::root().mkpath(Qt6CT::userStyleSheetPath());
 
     m_menu = new QMenu(this);
-    m_menu->addAction(QIcon::fromTheme("accessories-text-editor"), tr("Edit"), this, SLOT(on_editButton_clicked()));
-    m_menu->addAction(QIcon::fromTheme("edit-copy"), tr("Create a Copy"), this, SLOT(copyStyleSheet()));
-    m_menu->addAction(tr("Rename"), this, SLOT(on_renameButton_clicked()));
+    m_menu->addAction(QIcon::fromTheme(u"accessories-text-editor"_s), tr("Edit"), this, &QSSPage::on_editButton_clicked);
+    m_menu->addAction(QIcon::fromTheme(u"edit-copy"_s), tr("Create a Copy"), this, &QSSPage::copyStyleSheet);
+    m_menu->addAction(tr("Rename"), this, &QSSPage::on_renameButton_clicked);
     m_menu->addSeparator();
-    m_menu->addAction(QIcon::fromTheme("edit-delete"), tr("Remove"), this, SLOT(on_removeButton_clicked()));
+    m_menu->addAction(QIcon::fromTheme(u"edit-delete"_s), tr("Remove"), this, &QSSPage::on_removeButton_clicked);
 
     readSettings();
 
     //icons
-    m_ui->createButton->setIcon(QIcon::fromTheme("document-new"));
-    m_ui->editButton->setIcon(QIcon::fromTheme("accessories-text-editor"));
-    m_ui->removeButton->setIcon(QIcon::fromTheme("edit-delete"));
+    m_ui->createButton->setIcon(QIcon::fromTheme(u"document-new"_s));
+    m_ui->editButton->setIcon(QIcon::fromTheme(u"accessories-text-editor"_s));
+    m_ui->removeButton->setIcon(QIcon::fromTheme(u"edit-delete"_s));
 }
 
 QSSPage::~QSSPage()
@@ -78,7 +78,7 @@ void QSSPage::writeSettings(QSettings *settings)
             styleSheets << item->data(QSS_FULL_PATH_ROLE).toString();
     }
 
-    settings->setValue("Interface/stylesheets", styleSheets);
+    settings->setValue(u"Interface/stylesheets"_s, styleSheets);
 }
 
 void QSSPage::on_qssListWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *)
@@ -106,10 +106,10 @@ void QSSPage::on_createButton_clicked()
     if(name.isEmpty())
         return;
 
-    if(!name.endsWith(".qss", Qt::CaseInsensitive))
-        name.append(".qss");
+    if(!name.endsWith(u".qss"_s, Qt::CaseInsensitive))
+        name.append(u".qss"_s);
 
-    QString filePath = Qt6CT::userStyleSheetPath() + QLatin1String("/") + name;
+    QString filePath = Qt6CT::userStyleSheetPath() + QLatin1Char('/') + name;
 
     if(QFile::exists(filePath))
     {
@@ -119,8 +119,8 @@ void QSSPage::on_createButton_clicked()
 
     //creating empty file
     QFile file(filePath);
-    file.open(QIODevice::WriteOnly);
-    file.close();
+    if(file.open(QIODevice::WriteOnly))
+        file.close();
 
     //creating item
     QFileInfo info(filePath);
@@ -166,7 +166,7 @@ void QSSPage::readSettings()
     findStyleSheets(Qt6CT::sharedStyleSheetPaths());
 
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    QStringList styleSheets = settings.value("Interface/stylesheets").toStringList();
+    QStringList styleSheets = settings.value("Interface/stylesheets"_L1).toStringList();
     for(int i = 0; i < m_ui->qssListWidget->count(); ++i)
     {
         QListWidgetItem *item = m_ui->qssListWidget->item(i);
@@ -181,7 +181,7 @@ void QSSPage::findStyleSheets(const QString &path)
 {
     QDir dir(path);
     dir.setFilter(QDir::Files);
-    dir.setNameFilters(QStringList() << "*.qss");
+    dir.setNameFilters(QStringList() << u"*.qss"_s);
 
     for(const QFileInfo &info : dir.entryInfoList())
     {
@@ -209,8 +209,8 @@ void QSSPage::on_renameButton_clicked()
     if(name.isEmpty())
         return;
 
-    if(!name.endsWith(".qss", Qt::CaseInsensitive))
-            name.append(".qss");
+    if(!name.endsWith(u".qss"_s, Qt::CaseInsensitive))
+        name.append(u".qss"_s);
 
     if(!m_ui->qssListWidget->findItems(name, Qt::MatchExactly).isEmpty())
     {
@@ -249,13 +249,13 @@ void QSSPage::copyStyleSheet()
 
     QString name = QInputDialog::getText(this, tr("Enter Style Sheet Name"), tr("File name:"),
                                          QLineEdit::Normal,
-                                         tr("%1 (copy).qss").arg(item->text().section('.',0,0)));
+                                         tr("%1 (copy).qss").arg(item->text().section(QLatin1Char('.'),0,0)));
 
     if(name.isEmpty())
         return;
 
-    if(!name.endsWith(".qss", Qt::CaseInsensitive))
-        name.append(".qss");
+    if(!name.endsWith(u".qss"_s, Qt::CaseInsensitive))
+        name.append(u".qss"_s);
 
     if(!m_ui->qssListWidget->findItems(name, Qt::MatchExactly).isEmpty())
     {
@@ -263,7 +263,7 @@ void QSSPage::copyStyleSheet()
         return;
     }
 
-    QString newPath = Qt6CT::userStyleSheetPath() + QLatin1String("/") + name;
+    QString newPath = Qt6CT::userStyleSheetPath() + QLatin1Char('/') + name;
 
     if(!QFile::copy(item->data(QSS_FULL_PATH_ROLE).toString(), newPath))
     {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -113,6 +113,11 @@ QStringList Qt6CT::sharedStyleSheetPaths()
 QString Qt6CT::userColorSchemePath()
 {
     return configPath() + QLatin1String("/colors");
+}
+
+QString Qt6CT::styleColorSchemeFile()
+{
+    return configPath() + QLatin1String("/style-colors.conf");
 }
 
 QStringList Qt6CT::sharedColorSchemePaths()

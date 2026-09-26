@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -41,8 +41,8 @@ QSSEditorDialog::QSSEditorDialog(const QString &filePath, QWidget *parent) :
     m_filePath = filePath;
 
     QFile file(filePath);
-    file.open(QIODevice::ReadOnly);
-    m_ui->textEdit->setPlainText(QString::fromUtf8(file.readAll()));
+    if(file.open(QIODevice::ReadOnly))
+        m_ui->textEdit->setPlainText(QString::fromUtf8(file.readAll()));
     setWindowTitle(tr("%1 - Style Sheet Editor").arg(file.fileName()));
 
     QFileInfo info(filePath);
@@ -53,7 +53,7 @@ QSSEditorDialog::QSSEditorDialog(const QString &filePath, QWidget *parent) :
     }
 
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    restoreGeometry(settings.value("QSSEditor/geometry").toByteArray());
+    restoreGeometry(settings.value("QSSEditor/geometry"_L1).toByteArray());
 }
 
 QSSEditorDialog::~QSSEditorDialog()
@@ -64,14 +64,14 @@ QSSEditorDialog::~QSSEditorDialog()
 void QSSEditorDialog::save()
 {
     QFile file(m_filePath);
-    file.open(QIODevice::WriteOnly);
-    file.write(m_ui->textEdit->toPlainText().toUtf8());
+    if(file.open(QIODevice::WriteOnly))
+        file.write(m_ui->textEdit->toPlainText().toUtf8());
 }
 
 void QSSEditorDialog::hideEvent(QHideEvent *)
 {
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    settings.setValue("QSSEditor/geometry", saveGeometry());
+    settings.setValue("QSSEditor/geometry"_L1, saveGeometry());
 }
 
 void QSSEditorDialog::on_buttonBox_clicked(QAbstractButton *button)

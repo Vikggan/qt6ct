@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -29,7 +29,6 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QApplication>
-#include <QFontDatabase>
 #include <QFontDialog>
 #include <QDir>
 #include <QFile>
@@ -50,8 +49,8 @@ FontsPage::FontsPage(QWidget *parent) :
     readSettings();
 
     //icons
-    m_ui->createFontsConfButton->setIcon(QIcon::fromTheme("document-new"));
-    m_ui->removeFontsConfButton->setIcon(QIcon::fromTheme("edit-delete"));
+    m_ui->createFontsConfButton->setIcon(QIcon::fromTheme(u"document-new"_s));
+    m_ui->removeFontsConfButton->setIcon(QIcon::fromTheme(u"edit-delete"_s));
 }
 
 FontsPage::~FontsPage()
@@ -61,9 +60,9 @@ FontsPage::~FontsPage()
 
 void FontsPage::writeSettings(QSettings *settings)
 {
-    settings->beginGroup("Fonts");
-    settings->setValue("general", m_ui->generalFontLabel->font().toString());
-    settings->setValue("fixed", m_ui->fixedFontLabel->font().toString());
+    settings->beginGroup(u"Fonts"_s);
+    settings->setValue(u"general"_s, m_ui->generalFontLabel->property("value"));
+    settings->setValue(u"fixed"_s, m_ui->fixedFontLabel->property("value"));
     settings->endGroup();
 }
 
@@ -71,36 +70,30 @@ void FontsPage::onFontChangeRequested(QWidget *widget)
 {
     bool ok = false;
     QFont font = QFontDialog::getFont (&ok, widget->font(), this);
-    if(!ok)
-        return;
-
-    if(font.weight() == QFont::Normal &&
-            (font.styleName() == QLatin1String("Regular") ||
-             font.styleName() == QLatin1String("Normal") ||
-             font.styleName() == QLatin1String("Book") ||
-             font.styleName() == QLatin1String("Roman")))
-        font.setStyleName(QString());
-
-    widget->setFont(font);
-    qobject_cast<QLabel*>(widget)->setText(font.family () + " " + QString::number(font.pointSize ()));
+    if(ok)
+    {
+        widget->setProperty("value", font.toString());
+        widget->setFont(font);
+        qobject_cast<QLabel*>(widget)->setText(font.family () + QChar::Space + QString::number(font.pointSize ()));
+    }
 }
 
 void FontsPage::readSettings()
 {
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    settings.beginGroup("Fonts");
-    loadFont(&settings, m_ui->generalFontLabel, "general");
-    loadFont(&settings, m_ui->fixedFontLabel, "fixed");
+    settings.beginGroup("Fonts"_L1);
+    loadFont(&settings, m_ui->generalFontLabel, u"general"_s);
+    loadFont(&settings, m_ui->fixedFontLabel, u"fixed"_s);
     settings.endGroup();
 }
 
 void FontsPage::loadFont(QSettings *settings, QLabel *label, const QString &key)
 {
-    QFont font = settings->value(key, key == QLatin1String("fixed")
-            ? QFontDatabase::systemFont(QFontDatabase::FixedFont)
-            : QFontDatabase::systemFont(QFontDatabase::GeneralFont)).value<QFont>();
-    label->setText(font.family() + " " + QString::number(font.pointSize()));
+    QFont font = QApplication::font();
+    font.fromString(settings->value(key, QApplication::font().toString()).toString());
+    label->setText(font.family() + QChar::Space + QString::number(font.pointSize()));
     label->setFont(font);
+    label->setProperty("value", font.toString());
 }
 
 void FontsPage::on_createFontsConfButton_clicked()
@@ -111,7 +104,7 @@ void FontsPage::on_createFontsConfButton_clicked()
 
 void FontsPage::on_removeFontsConfButton_clicked()
 {
-    QString path = QDir::homePath() + "/.config/fontconfig/fonts.conf";
+    QString path = QDir::homePath() + u"/.config/fontconfig/fonts.conf"_s;
 
 
     if(QFile::exists(path))
@@ -123,8 +116,8 @@ void FontsPage::on_removeFontsConfButton_clicked()
             return;
         }
 
-        QFile::remove(path + ".back");
-        QFile::copy(path, path + ".back");
+        QFile::remove(path + u".back"_s);
+        QFile::copy(path, path + u".back"_s);
         QFile::remove(path);
     }
 }

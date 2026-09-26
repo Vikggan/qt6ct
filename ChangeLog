@@ -1,32 +1,53 @@
 Changelog of the Qt6 Configuration Tool
-
 -----------
-Version 0.1
-* first test release
 
-Version 0.2
-* fixed Qt 6.0 Beta2 support
-* updated Danish translation (scootergrisen)
+Version 0.11
+* added Qt 6.10 support
+* disabled cmake warnings about private Qt headers
+* fixed qt6ct.desktop translations
+* applied some patches by Ilya Fedin:
+  - allow to override Qt plugin directory
+  - don't rely on label font for saving font settings
+  - always fallback to the QGenericUnixTheme
 
-Version 0.3
-* added cmake support (experimental)
-* fixed color schemes
-* fixed palette updating
-* updated Finish translation (Nikolay Korotkiy)
-* updated German translation (LeSnake)
-
-Version 0.4
-* fixed cmake support
-* fixed build with Qt 6.1 using cmake
-* prepend custom stylesheets to the application stylesheet (John Lindgren)
-
-Version 0.5
-* added troubleshooting settings
-* fixed issue with custom palette
+Version 0.10
+* reworked color settings
+* fixed issue with app-specific palette (John Lindgren)
+* fixed .desktop file name (Marcus Britanicus)
+* fixed CMake warning
+* enabled QPlatformTheme::HoverEffect hint
+* increased minimum Qt version to 6.2
+* code refactoring and optimization
+* moved home page to opencode.net
 * updated Dutch translation (Heimen Stoffels)
-* updated Spanish translation (Toni Estévez and salazarbarrera)
+* updated Polish translation (Marek Adamski)
 * updated Russian translation
-* updated Greek translation (Dimitrios Glentadakis)
+
+Version 0.9
+* added Qt 6.6 compatibility
+* added compatibility with QT_STYLE_OVERRIDE=qt5ct-style (RushingAlien)
+* improved cmake build:
+  - make translations optional (Jonas Kvinge)
+  - enabled reproducible build by default
+  - other fixes and improvements (Jonas Kvinge)
+* fixed crash on QML applications
+* fixed parallel build using qmake
+* fixed localization support
+* updated Dutch translation (Heimen Stoffels)
+* updated Polish translation (Marek Adamski)
+* updated Russian translation
+* updated French translation (Wallon)
+Version 0.8
+* added keywords entry to desktop file (Mateusz Łukasik)
+* fixed compatibility with applications that use own stylesheet (John Lindgren)
+* fixed font applying issue
+* updated Japanese translation (UTUMI Hirosi)
+
+Version 0.7
+* fixed crash when loading default font
+* changed font configuration format
+* improved icon loader
+* updated Czech translation (fri)
 
 Version 0.6
 * added Qt 6.4 support
@@ -45,29 +66,29 @@ Version 0.6
 * updated Spanish translation (Toni Estévez)
 * updated Greek translation (Dimitrios Glentadakis)
 
-Version 0.7
-* fixed crash when loading default font
-* changed font configuration format
-* improved icon loader
-* updated Czech translation (fri)
-
-Version 0.8
-* added keywords entry to desktop file (Mateusz Łukasik)
-* fixed compatibility with applications that use own stylesheet (John Lindgren)
-* fixed font applying issue
-* updated Japanese translation (UTUMI Hirosi)
-
-Version 0.9
-* added Qt 6.6 compatibility
-* added compatibility with QT_STYLE_OVERRIDE=qt5ct-style (RushingAlien)
-* improved cmake build:
-  - make translations optional (Jonas Kvinge)
-  - enabled reproducible build by default
-  - other fixes and improvements (Jonas Kvinge)
-* fixed crash on QML applications
-* fixed parallel build using qmake
-* fixed localization support
+Version 0.5
+* added troubleshooting settings
+* fixed issue with custom palette
 * updated Dutch translation (Heimen Stoffels)
-* updated Polish translation (Marek Adamski)
+* updated Spanish translation (Toni Estévez and salazarbarrera)
 * updated Russian translation
-* updated French translation (Wallon)
+* updated Greek translation (Dimitrios Glentadakis)
+
+Version 0.4
+* fixed cmake support
+* fixed build with Qt 6.1 using cmake
+* prepend custom stylesheets to the application stylesheet (John Lindgren)
+
+Version 0.3
+* added cmake support (experimental)
+* fixed color schemes
+* fixed palette updating
+* updated Finish translation (Nikolay Korotkiy)
+* updated German translation (LeSnake)
+
+Version 0.2
+* fixed Qt 6.0 Beta2 support
+* updated Danish translation (scootergrisen)
+
+Version 0.1
+* first test release

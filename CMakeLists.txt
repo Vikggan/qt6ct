@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.16.0)
+cmake_minimum_required(VERSION 3.18.0)
 
 project(qt6ct LANGUAGES CXX)
+
+if(POLICY CMP0175)
+    cmake_policy(SET CMP0175 NEW)
+endif()
 
 include(GNUInstallDirs)
 
@@ -20,6 +24,7 @@ set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
 set(QT_NO_PRIVATE_MODULE_WARNING ON)
 
@@ -60,8 +65,10 @@ if(Qt6LinguistTools_FOUND)
     endif()
 endif()
 
-#execute_process(COMMAND ${QT_QTPATHS_EXECUTABLE} -query QT_INSTALL_PLUGINS OUTPUT_VARIABLE PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND ${QT_QTPATHS_EXECUTABLE} --plugin-dir OUTPUT_VARIABLE PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+if(NOT PLUGINDIR)
+    #execute_process(COMMAND ${QT_QTPATHS_EXECUTABLE} -query QT_INSTALL_PLUGINS OUTPUT_VARIABLE PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+    execute_process(COMMAND ${QT_QTPATHS_EXECUTABLE} --plugin-dir OUTPUT_VARIABLE PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
 
 if(PLUGINDIR)
    message(STATUS "Plugin path: ${PLUGINDIR}")
@@ -91,6 +98,7 @@ if(UNIX)
     add_custom_target(distclean @echo cleaning for source distribution)
 
     add_custom_command(
+        POST_BUILD
         COMMENT "distribution clean"
         COMMAND make
         ARGS -C ${CMAKE_CURRENT_BINARY_DIR} clean

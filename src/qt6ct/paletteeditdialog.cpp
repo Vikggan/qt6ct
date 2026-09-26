@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024, Ilya Kotov <forkotov02@ya.ru>
+ * Copyright (c) 2020-2025, Ilya Kotov <forkotov02@ya.ru>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -50,7 +50,7 @@ PaletteEditDialog::PaletteEditDialog(const QPalette &palette, QStyle *currentSty
     setPalette(palette);
 
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    restoreGeometry(settings.value("PaletteEditor/geometry").toByteArray());
+    restoreGeometry(settings.value("PaletteEditor/geometry"_L1).toByteArray());
 }
 
 PaletteEditDialog::~PaletteEditDialog()
@@ -102,7 +102,7 @@ void PaletteEditDialog::setPalette(const QPalette &palette)
 void PaletteEditDialog::hideEvent(QHideEvent *)
 {
     QSettings settings(Qt6CT::configFile(), QSettings::IniFormat);
-    settings.setValue("PaletteEditor/geometry", saveGeometry());
+    settings.setValue("PaletteEditor/geometry"_L1, saveGeometry());
 }
 
 void PaletteEditDialog::on_tableWidget_itemClicked(QTableWidgetItem *item)
