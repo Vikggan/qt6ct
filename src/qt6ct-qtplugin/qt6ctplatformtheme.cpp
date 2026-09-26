@@ -49,6 +49,7 @@
 #include <QFile>
 #include <QFileSystemWatcher>
 #include <utility>
+#include <private/qiconloader_p.h>
 #ifdef QT_QUICKCONTROLS2_LIB
 #include <QQuickStyle>
 #endif
@@ -63,6 +64,7 @@
 #ifdef KF_ICONTHEMES_LIB
 #include <KIconEngine>
 #include <KIconLoader>
+#include <KIconTheme>
 #endif
 
 Q_LOGGING_CATEGORY(lqt6ct, "qt6ct", QtWarningMsg)
@@ -274,6 +276,14 @@ void Qt6CTPlatformTheme::applySettings()
 
     if(m_update)
     {
+        QIconLoader::instance()->updateSystemTheme();
+#ifdef KF_ICONTHEMES_LIB
+        // KIconLoader keeps a separate theme tree, so refresh it after Qt's
+        // platform theme has picked up the new qt6ct icon theme.
+        KIconTheme::reconfigure();
+        KIconLoader *iconLoader = KIconLoader::global();
+        iconLoader->reconfigure(iconLoader->objectName());
+#endif
         QWindowSystemInterface::handleThemeChange();
         QCoreApplication::postEvent(qGuiApp, new QEvent(QEvent::ApplicationFontChange));
     }
@@ -334,7 +344,22 @@ void Qt6CTPlatformTheme::readSettings()
         if(style.endsWith("gtk2") && dialogs == QLatin1String("gtk3"))
             dialogs = QLatin1String("gtk2");
         if(keys.contains(dialogs))
+        {
+#ifdef KF_ICONTHEMES_LIB
+            // A nested KDE platform theme can initialize KIconLoader before
+            // qt6ct becomes active. Temporarily expose qt6ct's theme so an
+            // application fallback such as Breeze is not cached as current.
+            const bool setTemporaryIconTheme = !m_iconTheme.isEmpty() &&
+                    !QIconLoader::instance()->hasUserTheme();
+            if(setTemporaryIconTheme)
+                QIcon::setThemeName(m_iconTheme);
+#endif
             m_theme.reset(QPlatformThemeFactory::create(dialogs));
+#ifdef KF_ICONTHEMES_LIB
+            if(setTemporaryIconTheme)
+                QIcon::setThemeName(QString());
+#endif
+        }
     }
 
     settings.endGroup();
